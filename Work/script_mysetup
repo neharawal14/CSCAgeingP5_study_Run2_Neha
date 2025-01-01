@@ -1,8 +1,0 @@
-#!/bin/sh
-# Setup global variables used in the gas gain study code and macros at UF
-# Modify script accordingly to paths you have and are going to use.
-
-export USERFOLDER=the_user_folder
-export WORK=$USERFOLDER/Work
-export SRC=$USERFOLDER/Src
-export OUT=the_output_folder
