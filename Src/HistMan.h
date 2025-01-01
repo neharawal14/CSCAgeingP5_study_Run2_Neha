@@ -7,6 +7,7 @@
 #include "TH2D.h"
 #include "TH1F.h"
 #include "TH2F.h"
+using namespace std;
 //#include <algorithm>
 
 class HistMan : public TObject {
