@@ -108,7 +108,6 @@ public :
        double, double, double, double, 
        double, double, double, double); */
    void defining_bool(TString , double, double, double ,double);
-   //void defining_bool();
 
    double ApplyCorrection( double pressure ,TString correctiontype, double p0, double p1 );
    virtual void  Loop(TString , TString, TString, TString, TString);
