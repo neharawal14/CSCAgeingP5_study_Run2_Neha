@@ -1,6 +1,6 @@
 //#define pressure_dependence_removal_instlumi_cxx
 #include "pressure_dependence_removal_instlumi.h"
-#include "badchannel.h"
+//#include "badchannel.h"
 #include <TNamed.h>
 #include <iostream>
 #include <stdio.h>
@@ -34,7 +34,7 @@ void pressure_dependence_removal_instlumi::defining_bool(TString year_string, do
 //    double instlumi_low_value_2018, double instlumi_up_value_2018
 //    ) { 
  
- testing_code = true;
+ testing_code =false;
  second_iteration =true;
 //// for intlumi corrections, time
  intlumi_initial = true;
@@ -369,8 +369,6 @@ void pressure_dependence_removal_instlumi::Loop(TString input_file_path, TString
 
   delete hchargevsintegratelumi_initial;
   delete hchargevstime_initial;
-  //hchargevsintegratelumi_initial = nullptr;
-  //hchargevstime_initial = nullptr;
 
   } // end of intlumi_initial or time_initial
 
@@ -490,10 +488,6 @@ if(pressure_corr) {
     delete hchargevspressure_2016;
     delete hchargevspressure_2017;
     delete hchargevspressure_2018;
-    // hchargevspressure_2016 = nullptr;
-    // hchargevspressure_2017 = nullptr;
-    // hchargevspressure_2018 = nullptr;
-
     // derving the average pressure parameter to use for correcting slope
     if(pressure_corr_2016){
      params_pressure_const_avg_2016 =  params_pressure_2016[0].first;
@@ -773,7 +767,6 @@ if(second_iteration){
     params_pressure_second_2016 = GetSlope( hchargevspressure_second_2016, "_pressure", detregionstr,"",outf, chamber_string_name);  // The function on the line above fits the trim mean charge vs pressure for each rechit and returns the fitted parameters.   
 		}
     delete hchargevspressure_second_2016;
-    // hchargevspressure_second_2016 = nullptr; 
     
 		if(hchargevspressure_second_2017 != NULL && hchargevspressure_second_2017->GetEntries() >=100 && pressure_corr_2017){
      std::cout<<" entries  hcharge "<<hchargevspressure_second_2017->GetEntries()<<std::endl;
@@ -787,7 +780,6 @@ if(second_iteration){
 		}
 
     delete hchargevspressure_second_2018;
-    // hchargevspressure_second_2018 = nullptr; 
     // Taking average of pressure corrections
       if(pressure_corr_2016) {
           params_pressure_const_avg_second_2016 =  params_pressure_second_2016[0].first  ;
@@ -1114,7 +1106,6 @@ vector < std::pair<double, double > >  pressure_dependence_removal_instlumi::Get
 
 	TDirectoryFile *dir_var_name =  (TDirectoryFile*) outf->mkdir(dir_name_var);
 	dir_var_name->cd();
-   myh->AddDirectory(kFALSE); 
 	// result function is used to store the value of the slope and constant after fitting 
   vector < std::pair<double, double >  > result ; //Assume that fitted function has two parameters
   
@@ -1208,7 +1199,6 @@ vector < std::pair<double, double > >  pressure_dependence_removal_instlumi::Get
     for (int j = 1; j <= myh->GetNbinsY(); j++) {
     //TH1D* proj1 = (h == 0) ? nullptr : (TH1D*)(myh->ProjectionX("_px", j, j, h, h))->Clone();
     TH1D* proj1 = (h == 0) ? nullptr : (TH1D*)(myh->ProjectionX("_px", j, j, h, h));
-    proj1->AddDirectory(kFALSE);
     if (proj1) {  // Only add if the projection is not null
         num_entries[h] += proj1->GetEntries();
         //num_entries_all_bins += proj1->GetEntries();
@@ -1217,10 +1207,6 @@ vector < std::pair<double, double > >  pressure_dependence_removal_instlumi::Get
     }
     if(num_entries[h]!=0) nb_channels++;
  
-     num_entries_1D_hist_all_bins_minus->AddDirectory(kFALSE);
-     num_entries_1D_hist_all_bins_plus->AddDirectory(kFALSE);
-     num_entries_2D_hist_all_bins_minus->AddDirectory(kFALSE);
-     num_entries_2D_hist_all_bins_plus->AddDirectory(kFALSE);
 
    if(h!=0){ 
      //std::cout<<"*******************entries in the channel "<<h<<" : "<<num_entries[h]<<std::endl;
@@ -1354,7 +1340,6 @@ vector < std::pair<double, double > >  pressure_dependence_removal_instlumi::Get
       for(int j = 1; j <= myh->GetNbinsY(); j++){
         //TH1D* proj = (h==0)? (TH1D*) (myh->ProjectionX("_px",j,j,1,1))->Clone() : (TH1D*)(myh->ProjectionX("_px",j,j,h,h))->Clone();  
         TH1D* proj = (h==0)? (TH1D*) (myh->ProjectionX("_px",j,j,1,1))->Clone() : (TH1D*)myh->ProjectionX("_px",j,j,h,h)->Clone();  
-        proj->AddDirectory(kFALSE);
 
         // saving all the distributions 
         
@@ -1394,9 +1379,7 @@ vector < std::pair<double, double > >  pressure_dependence_removal_instlumi::Get
               TString rhidshort ="chamber"+ (TString) Form("%d", thechamber)  +"_layer"+ (TString)Form("%d",ichan%10) + "_Endcap"+ theendcap;
 
               TH1D * h_prov = (TH1D*) ( myh->ProjectionX("_px",j,j, ichan,ichan) )->Clone();
-              h_prov->AddDirectory(kFALSE);
               TH1D * h_prov_new = (TH1D*) h_prov->Clone();
-              h_prov_new->AddDirectory(kFALSE);
               h_prov_new->Reset();
               h_prov_new->ResetStats();
 
@@ -1472,7 +1455,6 @@ vector < std::pair<double, double > >  pressure_dependence_removal_instlumi::Get
 
 
         TH1D *h_trim_new = (TH1D*) proj->Clone() ;
-        h_trim_new->AddDirectory(kFALSE);
 
         // before truncating lets plot charge distribution 
         //Previously we were truncating only individual channel not all good channels 
