@@ -1,0 +1,10 @@
+#!/bin/bash
+#python3 Submitting_Slurmjobs.py   --dataset B --year 2017 --input_path  /cmsuf/data/store/user/nrawal/rootfiles_PromptReco/SingleMuon_2017_prompt_new/SingleMuon/crab_SingleMuon_Run2017B-ZMu-09Aug2019_UL2017-v1/ --output_path /cmsuf/data/store/user/t2/users/neha.rawal/CSCAgeing_outputs_Run2/Input_files_IncludingWires/2017/2017B/
+
+#python3 Submitting_Slurmjobs.py   --dataset C --year 2017 --input_path  /cmsuf/data/store/user/nrawal/rootfiles_PromptReco/SingleMuon_2017_prompt_new/SingleMuon/crab_SingleMuon_Run2017C-ZMu-09Aug2019_UL2017-v1/ --output_path /cmsuf/data/store/user/t2/users/neha.rawal/CSCAgeing_outputs_Run2/Input_files_IncludingWires/2017/2017C/
+
+#python3 Submitting_Slurmjobs.py   --dataset D --year 2017 --input_path  /cmsuf/data/store/user/nrawal/rootfiles_PromptReco/SingleMuon_2017_prompt_new/SingleMuon/crab_SingleMuon_Run2017D-ZMu-09Aug2019_UL2017-v1/ --output_path /cmsuf/data/store/user/t2/users/neha.rawal/CSCAgeing_outputs_Run2/Input_files_IncludingWires/2017/2017D/
+
+#python3 Submitting_Slurmjobs.py   --dataset E --year 2017 --input_path  /cmsuf/data/store/user/nrawal/rootfiles_PromptReco/SingleMuon_2017_prompt_new/SingleMuon/crab_SingleMuon_Run2017E-ZMu-09Aug2019_UL2017-v1/ --output_path /cmsuf/data/store/user/t2/users/neha.rawal/CSCAgeing_outputs_Run2/Input_files_IncludingWires/2017/2017E/
+#
+python3 Submitting_Slurmjobs.py   --dataset F --year 2017 --input_path  /cmsuf/data/store/user/nrawal/rootfiles_PromptReco/SingleMuon_2017_prompt_new/SingleMuon/crab_SingleMuon_Run2017F-ZMu-09Aug2019_UL2017-v1/ --output_path /cmsuf/data/store/user/t2/users/neha.rawal/CSCAgeing_outputs_Run2/Input_files_IncludingWires/2017/2017F/

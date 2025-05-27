@@ -1,11 +1,12 @@
-#CSC ageing studies on P5 data - Run2 with new selections
+# CSC ageing studies on P5 data - Run2 with new selections
 
-##Setup
+## Setup
 This code is for CMSSW_13_3_0
 ```source /cvmfs/cms.cern.ch/cmsset_default.sh cmsrel CMSSW_13_3_0 
 cd CMSSW_13_3_0/src 
 cmsenv
 ```
+
 ## Checkout the branch  Dev_Run2_code
 ```
 git remote add origin  git@github.com:neharawal14/CSCAgeingP5_study_Run2_Neha.git 
@@ -37,9 +38,11 @@ Make your executable
 
 In my current hipergator I need to change the prefix of my CMAKE_PREFIX_PATH to the root I use.
 Find MY_ROOT_PATH using
-``` which root
+``` 
+which root
 ```
 Update prefix path  : 
-```export CMAKE_PREFIX_PATH=MY_ROOT_PATH:$CMAKE_PREFIX_PATH
+```
+export CMAKE_PREFIX_PATH=MY_ROOT_PATH:$CMAKE_PREFIX_PATH
 ```
 

@@ -23,8 +23,8 @@ string(REPLACE "-L " "-L" ROOT_EXE_LINKER_FLAGS "${ROOT_EXE_LINKER_FLAGS}")
 separate_arguments(ROOT_EXE_LINKER_FLAGS)
 
 root_generate_dictionary(G__Analysis 
-	${CMAKE_CURRENT_SOURCE_DIR}/AnalysisGasGain.h
-	# ${CMAKE_CURRENT_SOURCE_DIR}/old_code.h
+	#${CMAKE_CURRENT_SOURCE_DIR}/AnalysisGasGain.h
+	${CMAKE_CURRENT_SOURCE_DIR}/old_AnalysisGasGain.h
   ${CMAKE_CURRENT_SOURCE_DIR}/HistMan.h
   ${CMAKE_CURRENT_SOURCE_DIR}/ChargeORIGandInstL.h
 	${CMAKE_CURRENT_SOURCE_DIR}/me11.h
@@ -40,7 +40,8 @@ root_generate_dictionary(G__Analysis
   )
 
 add_library(Analysis SHARED 
-	${CMAKE_CURRENT_SOURCE_DIR}/AnalysisGasGain.cxx
+	#${CMAKE_CURRENT_SOURCE_DIR}/AnalysisGasGain.cxx
+	${CMAKE_CURRENT_SOURCE_DIR}/old_AnalysisGasGain.cxx
 	#${CMAKE_CURRENT_SOURCE_DIR}/old_code.cxx
   ${CMAKE_CURRENT_SOURCE_DIR}/HistMan.cxx
 	${CMAKE_CURRENT_SOURCE_DIR}/ChargeORIGandInstL.C

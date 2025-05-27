@@ -38,13 +38,11 @@ private:
   UInt_t      ftimeSecond;
   Int_t fvertex_nVertex;
   Int_t  fBunchCrossing;
-
+  
   Int_t       frecHits2D_nRecHits2D;
   Int_t       frecHits2D_ID_endcap[10000], frecHits2D_ID_station[10000],
               frecHits2D_ID_ring[10000],   frecHits2D_ID_chamber[10000], 
               frecHits2D_ID_layer[10000];
-  Int_t       frecHits2D_nearestStrip[10000];
-  Int_t       frecHits2D_nearestWireGroup[10000];
   Double_t    frecHits2D_localX[10000],  frecHits2D_localY[10000],    
               frecHits2D_SumQ[10000];
 
@@ -84,7 +82,7 @@ private:
 
   Bool_t fmuons_Zcand[200];
   Bool_t fmuons_isomuondzdxy[200];
-  Bool_t fmuons_matched_trigger[200];
+
   // New muon variable we are adding so can apply tight ID
   Bool_t fmuons_isGlobalMuon[200];
   Bool_t fmuons_isPFMuon[200];
@@ -95,16 +93,7 @@ private:
   Bool_t fmuons_isTrackerMuon[200];
   Int_t fmuons_numberOfChambers[1000];
  Int_t fmuons_numberOfSegments[1000];
- Int_t fmuons_numberOfMatchedStations[1000];
- Int_t fmuons_trackerLayers[1000];
- Int_t fmuons_trackerValidPixelHits[1000];
 
- int nb_trigger_matched;
- double pT_matched[20];
- double eta_matched[20];
- double phi_matched[20];
- int Id_matched[20];
- double mass_mu;
   // Yloc boundaries of HV segments in CSC layers
   // Low and High Y local coordinates (cm) of the segments
   Float_t  me12YlocHVsgmLow[3],   me12YlocHVsgmHigh[3],
@@ -114,10 +103,7 @@ private:
            me41YlocHVsgmLow[3],   me41YlocHVsgmHigh[3],
            me234_2YlocHVsgmLow[5],me234_2YlocHVsgmHigh[5];
   TFile * myoutfilefortree[33] ;
-  TFile * myoutfilefortree1 ;
   TTree * outputtree[40]; //output tree 
-  TTree * outputtree1; //output tree 
-
   //Format is the following: 
   //treeME11a
   //treeME11b
@@ -175,8 +161,6 @@ private:
 	double z_mass;
 	double isolation1;
 	double isolation2;
-	int _nearestStrip;
-	int _nearestWireGroup;
 
 	double iso_PF_first;
 	double iso_PF_second;

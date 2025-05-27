@@ -2,7 +2,7 @@ import re
 import csv
 def split_csv(path):
     f = open(path)
-    my_file = open("./IntegrateLumi_2016.h","w")
+    my_file = open("./IntegrateLumi_2017.h","w")
     #my_file.write("date\tIntegrated_lumi")
     #my_file.write("\n")
     data = []
@@ -68,6 +68,6 @@ def split_csv(path):
     my_file.close()
 
 if __name__ == '__main__':
-    path_csv = "./luminoisty_2016.csv"
+    path_csv = "./2017_lumi_DCSONLY.csv"
     split_csv(path_csv)
 

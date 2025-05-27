@@ -133,45 +133,6 @@ void AnalysisGasGain::Setup(Int_t fstat,Int_t fprint,string inp,string out, stri
 
 void AnalysisGasGain::SetupTree(){
   //this->SetupPrint();
-    TString filetreelocation1 = (TString) histrootname;
-    filetreelocation1.ReplaceAll(".root","_tree.root");
-    myoutfilefortree1 = new TFile(filetreelocation1,"RECREATE"); 
-		if(debug_bool) std::cout<<" trees created for all the segments"<<std::endl;
-    
-    outputtree1= new TTree("tree","tree");
-    outputtree1->Branch("_passZmumusel",   &passZmumusel,   "_passZmumusel/O");
-    outputtree1->Branch("_passisomuondzdxy",   &passisomuondzdxy,   "_passisomuondzdxy/O");
-    outputtree1->Branch("_eventNb",   &_eventNb,   "_eventNb/l");
-    outputtree1->Branch("_runNb",   &_runNb,   "_runNb/l");
-    outputtree1->Branch("_lumiBlock",   &_lumiBlock,   "_lumiBlock/l");
-    outputtree1->Branch("_rhid",&_rhid,"_rhid/I");
-    outputtree1->Branch("_stationring",&_stationring,"_stationring/I");
-    outputtree1->Branch("_nearestStrip",&_nearestStrip,"_nearestStrip/I");
-    outputtree1->Branch("_nearestWireGroup",&_nearestWireGroup,"_nearestWireGroup/I");
-    outputtree1->Branch("_rhsumQ",&_rhsumQ,"_rhsumQ/D");
-    outputtree1->Branch("_rhsumQ_RAW",&_rhsumQ_RAW,"_rhsumQ_RAW/D");
-    outputtree1->Branch("_HV",&_HV,"_HV/D");
-    outputtree1->Branch("_current",&_current,"_current/D");
-    outputtree1->Branch("_pressure",&_pressure,"_pressure/D");
-    outputtree1->Branch("_temperature",&_temperature,"_temperature/D");
-    outputtree1->Branch("_instlumi",&_instlumi,"_instlumi/D");
-    outputtree1->Branch("_integratelumi",&_integratelumi,"_integratelumi/D");
-    outputtree1->Branch("_timesecond",&_timesecond,"_timesecond/i") ;
-    outputtree1->Branch("_n_PV",&_n_PV,"_n_PV/I");
-    outputtree1->Branch("_bunchcrossing",&_bunchcrossing,"_bunchcrossing/I");
-    outputtree1->Branch("_etamuon",&_etamuon,"_etamuon/D");
-    outputtree1->Branch("_phimuon",&_phimuon,"_phimuon/D");
-    outputtree1->Branch("_ptmuon",&_ptmuon,"_ptmuon/D");
-	  outputtree1->Branch("iso_PF_first",&iso_PF_first,"iso_PF_first/D");
-	  outputtree1->Branch("iso_PF_second",&iso_PF_second,"iso_PF_second/D");
-	  outputtree1->Branch("z_pt",&z_pt,"z_pt/D");
-    outputtree1->Branch("z_eta",&z_eta,"z_eta/D");
-    outputtree1->Branch("z_phi",&z_phi,"z_phi/D");
-    outputtree1->Branch("z_mass",&z_mass,"z_mass/D");
-    outputtree1->Branch("isolation1",&isolation1,"isolation1/D");
-    outputtree1->Branch("isolation2",&isolation2,"isolation2/D");
-
-
   for(int i = 0; i <32;i++){
 		if(debug_bool) std::cout<<"creating trees for all the segments"<<std::endl;
     TString treename =GetRegionName(i);
@@ -190,8 +151,6 @@ void AnalysisGasGain::SetupTree(){
     outputtree[i]->Branch("_lumiBlock",   &_lumiBlock,   "_lumiBlock/l");
     outputtree[i]->Branch("_rhid",&_rhid,"_rhid/I");
     outputtree[i]->Branch("_stationring",&_stationring,"_stationring/I");
-    outputtree[i]->Branch("_nearestStrip",&_nearestStrip,"_nearestStrip/I");
-    outputtree[i]->Branch("_nearestWireGroup",&_nearestWireGroup,"_nearestWireGroup/I");
     outputtree[i]->Branch("_rhsumQ",&_rhsumQ,"_rhsumQ/D");
     outputtree[i]->Branch("_rhsumQ_RAW",&_rhsumQ_RAW,"_rhsumQ_RAW/D");
     outputtree[i]->Branch("_HV",&_HV,"_HV/D");
@@ -218,7 +177,7 @@ void AnalysisGasGain::SetupTree(){
 		if(debug_bool) std::cout<<" branches declared succesfully for all the segments"<<std::endl;
 		if(debug_bool) std::cout<<"Setup did perfeclty  "<<std::endl;
   }
- 
+
 }
 
 /* *********************** SetupPrint ************************************* */
@@ -290,9 +249,6 @@ void AnalysisGasGain::Analyze(HistMan *histos) {
   CycleTree(histos);
 	if(debug_bool) std::cout<<"eror in clearing hist maps"<<std::endl;
   histos->ClearHistMaps();
-  myoutfilefortree1->cd();
-  outputtree1->Write();
-  myoutfilefortree1->Close();
   for(int i = 0; i<32;i++){
 	if(debug_bool) std::cout<<"issue when we try to enter individual trees "<<std::endl;
   myoutfilefortree[i]->cd();
@@ -365,17 +321,17 @@ for(Int_t irechit=0;irechit<frecHits2D_nRecHits2D;irechit++) {
        if(m_nRecHitlayerME14.find(key_layer)!= m_nRecHitlayerME14.end())   
          if(m_nRecHitlayerME14[key_layer]==3){// From what I understand this ensures there are only 3 hits (i.e. 3 times the same hit) in a given layer. (???).
            if(m_RecHitlayerME14_final.find(key_layer)== m_RecHitlayerME14_final.end()) {
-	           m_RecHitlayerME14_final[key_layer]=zero6;
-	           m_RecHitlayerME14_final[key_layer][0]=xloc;
+	     m_RecHitlayerME14_final[key_layer]=zero6;
+	     m_RecHitlayerME14_final[key_layer][0]=xloc;
              m_RecHitlayerME14_final[key_layer][1]=yloc;
              m_RecHitlayerME14_final[key_layer][2]=sumq;
              m_RecHitlayerME14_final[key_layer][3]=999.;
              m_RecHitlayerME14_final[key_layer][4]=999.;
              m_RecHitlayerME14_final[key_layer][5]=999.;
-	         }
-	        } // end of if(m_nRecHitlayerME14[key_layer]==3)
-       }  // end of  if(station==1 && ring==4 && sumq > 0.0)
-     }  // end of for(Int_t irechit=0;irechit<frecHits2D_nRecHits2D
+	   }
+	 } // end of if(m_nRecHitlayerME14[key_layer]==3)
+     }  // end of  if(station==1 && ring==4 && sumq > 0.0)
+ }  // end of for(Int_t irechit=0;irechit<frecHits2D_nRecHits2D
 
 } // end of GetME14RecHits
 
@@ -504,7 +460,8 @@ void AnalysisGasGain::GetTracks(HistMan* histos) {
      int hits_total = 0;
      // Loop over muons
      for(UInt_t i=0;i<fmuons_cscSegmentRecord_nRecHits->size();i++) {
-        if(debug_new) std::cout<<" inside the loop for the muons "<<i<< " size "<<(*fmuons_cscSegmentRecord_nRecHits)[i].size()<<std::endl;
+        if(debug_new) std::cout<<" inside the loop for the muons "<<i<<
+        " size "<<(*fmuons_cscSegmentRecord_nRecHits)[i].size()<<std::endl;
         // Going to all the segments in a muon
         if(i<10 && (*fmuons_cscSegmentRecord_nRecHits)[i].size() > 0  && 
         (fmuons_Zcand[i] && fmuons_isomuondzdxy[i] )) { //Last part to make sure that muon is isolated and passes Zmumu selection
@@ -606,8 +563,6 @@ void AnalysisGasGain::GetRecHitsSumQ(HistMan* histos) {
     std::map<Int_t, int> rechit_count ; // number of rechits per key layer
     std::map<Int_t, std::map<Int_t, int>> rechit_counts ; // number of rechits per key layer
     std::map<Int_t, Double_t> temp_sumq; // sum of charges per key layer
-    std::map<Int_t, Int_t> temp_nStrip; // sum of charges per key layer
-    std::map<Int_t, Int_t> temp_nWire; // sum of charges per key layer
 	   if(debug_bool) std::cout<<" to collect charges : event "<<_eventNb<<std::endl;
      if(m_cscSegments_single_trk_recHitRecord.size() > 0) {
        for(Int_t irechit=0;irechit<frecHits2D_nRecHits2D;irechit++) {
@@ -617,8 +572,6 @@ void AnalysisGasGain::GetRecHitsSumQ(HistMan* histos) {
             Int_t endcap=frecHits2D_ID_endcap[irechit];
             Int_t station=frecHits2D_ID_station[irechit];
             Int_t chamber=frecHits2D_ID_chamber[irechit];
-     				Int_t nStrip=frecHits2D_nearestStrip[irechit];
-     				Int_t nWire=frecHits2D_nearestWireGroup[irechit];
             Int_t layer=frecHits2D_ID_layer[irechit];
             Int_t key_layer=100000*endcap+10000*station+1000*ring+
                          10*chamber+layer;
@@ -627,7 +580,6 @@ void AnalysisGasGain::GetRecHitsSumQ(HistMan* histos) {
             Double_t sumq=frecHits2D_SumQ[irechit];
 
             if(m_cscSegments_single_trk_recHitRecord.find(key_layer)!=m_cscSegments_single_trk_recHitRecord.end()) {
-
               Double_t dx=xloc-m_cscSegments_single_trk_recHitRecord[key_layer][0];
               Double_t dy=yloc-m_cscSegments_single_trk_recHitRecord[key_layer][1];
 	     
@@ -636,11 +588,8 @@ void AnalysisGasGain::GetRecHitsSumQ(HistMan* histos) {
               rechit_counts[iregion][key_layer]++;
               rechit_count[key_layer]++;
               if(fabs(dx) < 0.0001 && fabs(dy) < 0.0001){
-               if(debug_bool) std::cout<<"charge for key layer "<<key_layer<<" charge "<<sumq<<" event "<<_eventNb<<" chamber "<<chamber<<" nearest Strip "<<nStrip<<std::endl;
-               if(debug_bool) std::cout<<"endcap "<<endcap<<" station "<<station<<" chamber "<<chamber<<" layer "<<layer<<" Event "<<fEvent<<" hit "<<irechit<<std::endl;
+               if(debug_bool) std::cout<<"charge for key layer "<<key_layer<<" charge "<<sumq<<" event "<<_eventNb<<" chamber "<<chamber<<std::endl;
                 temp_sumq[key_layer] = sumq; // sum of charges per key layer
-								temp_nStrip[key_layer] = nStrip;
-								temp_nWire[key_layer] = nWire;
               } // end of if(fabs(dx) < 0.0001 && fabs(dy) < 0.0001)
               else{
                 if(debug_bool) cout<<"Warning, dx, dy not zero "<<dx<<" "<<dy<<" "<<key_layer<<"  "<<fEvent<<" key layer"<<key_layer<<endl;
@@ -687,9 +636,6 @@ void AnalysisGasGain::GetRecHitsSumQ(HistMan* histos) {
       	    m_cscSegments_single_trk_recHitRecord_final.end())
             m_cscSegments_single_trk_recHitRecord_final[key_layer]=
 	          m_cscSegments_single_trk_recHitRecord[key_layer];
-					// Adding the nearestStrip number in the final ntuple 
-					m_cscSegments_single_trk_recHitRecord_final[key_layer].push_back(static_cast<Double_t>(temp_nStrip[key_layer]));
-					m_cscSegments_single_trk_recHitRecord_final[key_layer].push_back(static_cast<Double_t>(temp_nWire[key_layer]));
           }
    	    } // end of  for(map<Int_t, std::vector <Double_t> >::iterator It=m_cscSegments_single_trk_recHitRecord.begin()
 
@@ -697,8 +643,7 @@ void AnalysisGasGain::GetRecHitsSumQ(HistMan* histos) {
 	           (Float_t)m_cscSegments_single_trk_recHitRecord_final.size();
 	      
       	//Laurent        histos->fill1DHist(df,"diff_map_sizes","","Difference in two map sizes","Entries",4,10,0.0,10.0,1.0,"Test");
-      // Printing switching off for now 
-		//if(df !=0.0) cout<<"Warning, different sizes "<<m_cscSegments_single_trk_recHitRecord.size()<<" "<<m_cscSegments_single_trk_recHitRecord_final.size()<<" "<<fEvent<<endl;
+        if(df !=0.0) cout<<"Warning, different sizes "<<m_cscSegments_single_trk_recHitRecord.size()<<" "<<m_cscSegments_single_trk_recHitRecord_final.size()<<" "<<fEvent<<endl;
         histos->fill1DHist((Float_t)m_cscSegments_single_trk_recHitRecord_final.size(),"used_rechits_no_per_event","","Number of used rechits per event","Entries",4,100,0.0,100.0,1.0,"Test");    //laurent: I commented this line:
 
 	      if(debug_bool) std::cout<<" finished collect charges "<<std::endl;
@@ -720,7 +665,6 @@ void AnalysisGasGain::AddME14RecHits() {
            m_cscSegments_single_trk_recHitRecord_final[(*It).first]=
 	     (*It).second;
 	 }
-
        } // end of for(map<Int_t, std::vector <Double_t> >::iterator It=m_RecHitlayerME14_final
 }
 
@@ -745,16 +689,15 @@ ostringstream ss;
           Int_t stationring=10*station+ring;
 
           // find HV segment
-      	  Float_t yloc=(Float_t)(*It).second[1];
+	  Float_t yloc=(Float_t)(*It).second[1];
           Int_t hvsgm=doHVsegment(yloc,station,ring,layer);
 	  //        histos->fill1DHist((float)hvsgm,"HV_segment","","HV segment #","Entries",4,6,0.0,6.0,1.0,"Hists"); //commented out by Laurent
           Float_t sumq=(Float_t)(*It).second[2];
      
-	        _ptmuon =(Double_t)(*It).second[3];
-	        _etamuon =(Double_t)(*It).second[4];
-	        _phimuon =(Double_t)(*It).second[5];
-		      _nearestStrip =  static_cast<Int_t>((*It).second[6]);
-		      _nearestWireGroup =  static_cast<Int_t>((*It).second[7]);
+	  _ptmuon =(Double_t)(*It).second[3];
+	  _etamuon =(Double_t)(*It).second[4];
+	  _phimuon =(Double_t)(*It).second[5];
+	  //	  cout << "eta, pt  " <<_etamuon<<", "<<_ptmuon <<endl;
           if(hvsgm > 0) { // skip rechits having no HV segment
             /* Following commented out by Laurent
             ss.str("");
@@ -791,7 +734,6 @@ ostringstream ss;
 	    _bunchcrossing = fBunchCrossing;
 	    _eventNb = fEvent;
 	    _timesecond =ftimeSecond ;
-
 	    /*	    cout <<"vt "<< (int)fvertex_nVertex <<
 	      ", "<<  (unsigned int)fvertex_nVertex<<
 	      ", "<<  (float)fvertex_nVertex<<
@@ -811,7 +753,6 @@ ostringstream ss;
         histos->fill1DHist((Float_t)_rhsumQ_RAW,"charge_for_selected_hits","","ADC charge for final used rechits","Entries",4,100,0.0,3000.0,1.0,"Test");
 	    int iregion = GetRegionIdx(station,ring,hvsgm);
 			if(debug_bool_region)std::cout<<" value of the region in each rechit "<<iregion<<" charge "<<_rhsumQ<<" event Nb"<<_eventNb<<" hv segment "<<hvsgm<<std::endl;
-	    outputtree1->Fill();
 	    if(iregion >=0)  outputtree[iregion]->Fill();
 	    else cout <<"region not found! " <<endl;
 	    
@@ -860,8 +801,6 @@ void AnalysisGasGain::CycleTree(HistMan* histos) {
   TBranch *b_recHits2D_ID_ring=tree->GetBranch("recHits2D_ID_ring");
   TBranch *b_recHits2D_ID_chamber=tree->GetBranch("recHits2D_ID_chamber");
   TBranch *b_recHits2D_ID_layer=tree->GetBranch("recHits2D_ID_layer");
-  TBranch *b_recHits2D_nearestStrip=tree->GetBranch("recHits2D_nearestStrip");
-  TBranch *b_recHits2D_nearestWireGroup=tree->GetBranch("recHits2D_nearestWireGroup");
   TBranch *b_recHits2D_localX=tree->GetBranch("recHits2D_localX");
   TBranch *b_recHits2D_localY=tree->GetBranch("recHits2D_localY");
   TBranch *b_recHits2D_SumQ=tree->GetBranch("recHits2D_SumQ");
@@ -883,13 +822,6 @@ void AnalysisGasGain::CycleTree(HistMan* histos) {
   TBranch *b_muons_cscSegmentRecord_localY=tree->GetBranch("muons_cscSegmentRecord_localY");
 
   TBranch *b_muons_nMuons=tree->GetBranch("muons_nMuons");
-
-	TBranch *b_nb_trigger_matched=tree->GetBranch("nb_trigger_matched");
-	TBranch *b_pT_matched=tree->GetBranch("pT_matched");
-  TBranch *b_eta_matched=tree->GetBranch("eta_matched");
-  TBranch *b_phi_matched=tree->GetBranch("phi_matched");
-  TBranch *b_Id_matched=tree->GetBranch("Id_matched");
-
   TBranch *b_muons_charge=tree->GetBranch("muons_charge");
   TBranch *b_muons_pt=tree->GetBranch("muons_pt");
   TBranch *b_muons_eta=tree->GetBranch("muons_eta");
@@ -913,10 +845,7 @@ void AnalysisGasGain::CycleTree(HistMan* histos) {
  TBranch *b_muons_globalTrackNormalizedChi2 = tree->GetBranch("muons_globalTrackNormalizedChi2");
  TBranch *b_muons_globalTrackNumberOfValidMuonHits= tree->GetBranch("muons_globalTrackNumberOfValidMuonHits");
  TBranch *b_muons_trackNumberOfValidHits = tree->GetBranch("muons_trackNumberOfValidHits");
- TBranch *b_muons_trackerLayers = tree->GetBranch("muons_trackerLayers");
- TBranch *b_muons_trackerValidPixelHits = tree->GetBranch("muons_trackerValidPixelHits");
  TBranch *b_muons_numberOfMatches = tree->GetBranch("muons_numberOfMatches");
- TBranch *b_muons_numberOfMatchedStations = tree->GetBranch("muons_numberOfMatchedStations");
  TBranch *b_muons_numberOfChambers = tree->GetBranch("muons_numberOfChambers");
  TBranch *b_muons_numberOfSegments = tree->GetBranch("muons_numberOfSegments");
 	if(debug_bool) std::cout<<"all branch declared"<<std::endl;
@@ -933,8 +862,6 @@ void AnalysisGasGain::CycleTree(HistMan* histos) {
   b_recHits2D_ID_ring->SetAddress(frecHits2D_ID_ring);
   b_recHits2D_ID_chamber->SetAddress(frecHits2D_ID_chamber);
   b_recHits2D_ID_layer->SetAddress(frecHits2D_ID_layer);
-  b_recHits2D_nearestStrip->SetAddress(frecHits2D_nearestStrip);
-  b_recHits2D_nearestWireGroup->SetAddress(frecHits2D_nearestWireGroup);
   b_recHits2D_localX->SetAddress(frecHits2D_localX);
   b_recHits2D_localY->SetAddress(frecHits2D_localY);
   b_recHits2D_SumQ->SetAddress(frecHits2D_SumQ); 
@@ -972,14 +899,7 @@ void AnalysisGasGain::CycleTree(HistMan* histos) {
   b_muons_cscSegmentRecord_localY->SetAddress(&fmuons_cscSegmentRecord_localY);
 
   b_muons_nMuons->SetAddress(&fmuons_nMuons);
- 
- 	b_nb_trigger_matched->SetAddress(&nb_trigger_matched);
- 	b_pT_matched->SetAddress(&pT_matched);
-  b_eta_matched->SetAddress(&eta_matched);
-  b_phi_matched->SetAddress(&phi_matched);
-  b_Id_matched->SetAddress(&Id_matched);
-
-	b_muons_charge->SetAddress(fmuons_charge);
+  b_muons_charge->SetAddress(fmuons_charge);
   b_muons_pt->SetAddress(fmuons_pt);
   b_muons_eta->SetAddress(fmuons_eta);
   b_muons_phi->SetAddress(fmuons_phi);
@@ -1003,9 +923,6 @@ void AnalysisGasGain::CycleTree(HistMan* histos) {
   b_muons_globalTrackNormalizedChi2->SetAddress(fmuons_globalTrackNormalizedChi2);
   b_muons_globalTrackNumberOfValidMuonHits->SetAddress(fmuons_globalTrackNumberOfValidMuonHits);
   b_muons_trackNumberOfValidHits->SetAddress(fmuons_trackNumberOfValidHits);
-  b_muons_numberOfMatchedStations->SetAddress(fmuons_numberOfMatchedStations);
-  b_muons_trackerLayers->SetAddress(fmuons_trackerLayers);
-  b_muons_trackerValidPixelHits->SetAddress(fmuons_trackerValidPixelHits);
   b_muons_numberOfMatches->SetAddress(fmuons_numberOfMatches);
   b_muons_numberOfChambers->SetAddress(fmuons_numberOfChambers);
   b_muons_numberOfSegments->SetAddress(fmuons_numberOfSegments);
@@ -1037,25 +954,8 @@ fmuons_cscSegmentRecord_localX    = 0;
 
   //if(debug_program)  std::cout<<"entering entry loop "<<std::endl;
     std::cout<<"entering entry loop "<<std::endl;
-  int passed_Zevents = 0;
-  int not_passed_Zevents = 0;
-  int not_passed_Zevents_zero = 0;
-  int not_passed_Zevents_multiple = 0;
-  int not_matched_events =0;
-  int valid_muon_indices = 0;
-  int non_valid_muon_indices = 0;
-  int matched_leading_trigger_events = 0;
-  int matched_subleading_trigger_events = 0;
-  int passed_Zevents_full_range = 0;
-  int not_passed_Zevents_full_range = 0;
-
-  int Nevents_trigger_matched = 0;
-  int Nevents_not_trigger_matched = 0;
-  int Nevents_not_trigger_matched_pTcut = 0;
-  int Nevents_with_two_isolated_muons = 0;
-
-  double pT_cut = 30;
-
+  int passed_events = 0;
+  int total_failed = 0;
 for(Int_t ient=0;ient<nentries;ient++) {
 //  for(Int_t ient=0;ient<100;ient++) {
    
@@ -1074,18 +974,10 @@ for(Int_t ient=0;ient<nentries;ient++) {
      b_recHits2D_ID_station->GetEntry(ient);
      b_recHits2D_ID_ring->GetEntry(ient);
      b_recHits2D_ID_chamber->GetEntry(ient);
-     b_recHits2D_nearestStrip->GetEntry(ient);
-     b_recHits2D_nearestWireGroup->GetEntry(ient);
      b_recHits2D_ID_layer->GetEntry(ient);
      b_recHits2D_localX->GetEntry(ient);
      b_recHits2D_localY->GetEntry(ient);
      b_recHits2D_SumQ->GetEntry(ient);
-     
-		 b_nb_trigger_matched->GetEntry(ient);
-		 b_pT_matched->GetEntry(ient);
-		 b_eta_matched->GetEntry(ient);
-		 b_phi_matched->GetEntry(ient);
-		 b_Id_matched->GetEntry(ient);
      
   if(debug_program)  std::cout<<"loaded few more of the branches"<<std::endl;
      b_cscSegments_recHitRecord_endcap->GetEntry(ient);
@@ -1122,9 +1014,6 @@ for(Int_t ient=0;ient<nentries;ient++) {
      b_muons_globalTrackNormalizedChi2->GetEntry(ient);
      b_muons_globalTrackNumberOfValidMuonHits->GetEntry(ient);
      b_muons_trackNumberOfValidHits->GetEntry(ient);
-     b_muons_numberOfMatchedStations->GetEntry(ient);
-     b_muons_trackerLayers->GetEntry(ient);
-     b_muons_trackerValidPixelHits->GetEntry(ient);
      b_muons_numberOfMatches->GetEntry(ient);
      b_muons_numberOfChambers->GetEntry(ient);
      b_muons_numberOfSegments->GetEntry(ient);
@@ -1141,260 +1030,199 @@ for(Int_t ient=0;ient<nentries;ient++) {
      m_cscSegments_single_trk_recHitRecord.clear();
      m_cscSegments_single_trk_recHitRecord_final.clear();
 
-     double pi = TMath::Pi();
-     if(year=="2016")  _pressure = getpressure2016(ftimeSecond);
-		 else if(year=="2017")  _pressure = getpressure2017(ftimeSecond);
-		 else if(year=="2018")  _pressure = getpressure2018(ftimeSecond);
-		 _temperature =0;
-     double mass_mu = 0.1056; 
-     if(debug_bool)  std::cout<<"loading of branches done`"<<std::endl;
+double pi = TMath::Pi();
+    if(year=="2016")  _pressure = getpressure2016(ftimeSecond);
+		else if(year=="2017")  _pressure = getpressure2017(ftimeSecond);
+		else if(year=="2018")  _pressure = getpressure2018(ftimeSecond);
 
+		_temperature =0;
+    double mass_mu = 0.1056; 
+     
 
-    // Variables to count the events passing each selection step
-    double isolation_value, isolation_value_04; 
-    double isolation_value_one, isolation_value_two;
-     for(int iM = 0; iM< fmuons_nMuons;iM++) {
-			 fmuons_Zcand[iM] = false; fmuons_isomuondzdxy[iM] = false;
-       fmuons_matched_trigger[iM] = false;
-      }
-     //To Skim: 2 muons pt 10, 70<M(mumu)<110
+  if(debug_bool)  std::cout<<"loading of branches done`"<<std::endl;
+
+      histos->fill1DHist(fmuons_nMuons,"number_muons_per_event","","Total number of muons per event","Entries",4,10,0.0,10.0,1.0,"Test");   
+
+     for( int iM = 0; iM< fmuons_nMuons;iM++) {
+			 fmuons_Zcand[iM] = false; fmuons_isomuondzdxy[iM] = false;}
+     //Skim: 2 muons pt 10, 70<M(mumu)<110
      passZmumusel= false;
      passisomuondzdxy = false;
      double mass =-1;
-		// Variables to find the one Z candidate
-		int first_index = 999, second_index = 999;
-		int prev_index_iM, prev_index_jM ; 
-		double nominal_mass = 91.1876; 
-	  //double prev_mass;
-    int nZcandidates = 0;
-    int nZcandidates_narrow = 0;
-    double best_mass_diff = 999.0;
 
-     histos->fill1DHist(fmuons_nMuons,"number_muons_per_event","","Total number of muons per event","Entries",4,10,0.0,10.0,1.0,"Test");   
-     if(debug_new) std::cout<<" number of muons in the event "<<fmuons_nMuons<<std::endl;
-     // Checking pT, eta, phi , isolation value for each muon
-     for(int tM=0; tM< fmuons_nMuons;tM++){
+       if(debug_bool) std::cout<<"enteing the loop for checking each muon entry"<<std::endl;
+       if(debug_new) std::cout<<" number of muons in the event "<<fmuons_nMuons<<std::endl;
+
+     double isolation_value, isolation_value_second; 
+     double isolation_value_04; 
+      for(int tM=0; tM< fmuons_nMuons;tM++){
             isolation_value = (fmuons_isoCH03[tM] + std::max (0.0, fmuons_isoNH03[tM] + fmuons_isoPhot03[tM] - 0.5*(fmuons_isoPU03[tM]) ) )/ fmuons_pt[tM]; 
             isolation_value_04 = (fmuons_isoCH04[tM] + std::max (0.0, fmuons_isoNH04[tM] + fmuons_isoPhot04[tM] - 0.5*(fmuons_isoPU04[tM]) ) )/ fmuons_pt[tM]; 
+            isolation_value_second = (fmuons_isoCH03[tM] + fmuons_isoNH03[tM] + fmuons_isoPhot03[tM] )/ fmuons_pt[tM]; 
+
             histos->fill1DHist(fmuons_pt[tM],"pT","","muon pT before selections (GeV)","Entries",4,40,0,200.0,1.0,"Test");
             histos->fill1DHist(fmuons_eta[tM],"eta","","muon #eta","Entries",4,100,-2.5,2.5,1.0,"Test");
             histos->fill1DHist(fmuons_phi[tM],"phi","","muon #phi","Entries",4,100,-pi,pi,1.0,"Test");
             histos->fill1DHist(abs(fmuons_dz[tM]),"dz_PV","","muon track distance from PV along z axis |dz(PV)|","Entries",4,50,0.0,1.0,1.0,"Test");
             histos->fill1DHist(abs(fmuons_dxy[tM]),"dxy_PV","","muon track distance from PV along XY plane |dxy(PV)|","Entries",4,50,0.0,1.0,1.0,"Test");
             histos->fill1DHist(fmuons_charge[tM],"muon_charge","","Muon charge ","Entries",4, 26,-13,13,1.0,"Test");
+          
            // Muon isolation plots
             histos->fill1DHist(isolation_value,"muon_isolation","","relative isolation I(PF) ","Entries",4,400,0,20,1.0,"Test");
             histos->fill1DHist(isolation_value_04,"muon_isolation_04","","relative isolation I(PF) : radius (0.4) ","Entries",4,400,0,0.2,1.0,"Test");
-            // This were some debug plots for the isolation values, commented out by Neha
-///            if(isolation_value==0){
-///            histos->fill1DHist(isolation_value,"muon_isolation_overall_zero","","muon isolation overall only zero entries ","Entries",4,400,0,0.2,1.0,"Test");
-///            histos->fill1DHist(fmuons_isoCH03[tM],"muon_isolation_overall_zero_isoCH03","","muon isolation overall only zero entries : isoCH03 ","Entries",4,400,0,0.2,1.0,"Test");
-///            histos->fill1DHist(fmuons_isoNH03[tM],"muon_isolation_overall_zero_isoNH03","","muon isolation overall only zero entries : isoNH03 ","Entries",4,400,0,0.2,1.0,"Test");
-///            histos->fill1DHist(fmuons_isoPhot03[tM],"muon_isolation_overall_zero_isoPhot03","","muon isolation overall only zero entries : isoPhot03 ","Entries",4,400,0,0.2,1.0,"Test");
-///            histos->fill1DHist(fmuons_isoPU03[tM],"muon_isolation_overall_zero_isoPU03","","muon isolation overall only zero entries : isoPU03 ","Entries",4,400,0,0.2,1.0,"Test");
-///            }
-///            if(fmuons_isoCH03[tM]==0 && fmuons_isoNH03[tM]==0 && fmuons_isoPhot03[tM]==0 && fmuons_isoPU03[tM]==0){
-///            histos->fill1DHist(isolation_value,"muon_isolation_individual_zero","","muon isolation overall : when everything is zero ","Entries",4,400,0,0.2,1.0,"Test");
-///            }
-///            if(fmuons_isoCH03[tM]==0 && fmuons_isoNH03[tM]==0 && fmuons_isoPhot03[tM]==0){
-///            histos->fill1DHist(isolation_value_second,"muon_isolation_second_individual_zero","","muon isolation : when everything is zero ","Entries",4,400,0,0.2,1.0,"Test");
-///            }
-///            if(isolation_value!=0) {
-///            histos->fill1DHist(isolation_value,"muon_isolation_overall_without_zerovalue","","relative isolation I(PF) ","Entries",4,400,0,2,1.0,"Test");
-///            } 
-      } // end of muon loop
-    if(debug_new) std::cout<<" Start checking selections for the muons in the event :"<<fmuons_nMuons<<std::endl;
-    // Need to select events with two isolated muons
-    // Need to match one of the isolated muons with trigger muon
-    // Need to check if the trigger matched muon has pT>28 GeV
-    // Need to build the Z candidate with the trigger matched muon and other muon of atleast 10 GeV and put selections on the Z candidate
+            histos->fill1DHist(isolation_value_second,"muon_isolation_second","","relative isolation I(PF) (second time)","Entries",4,400,0,0.2,1.0,"Test");
+            if(isolation_value==0){
+            histos->fill1DHist(isolation_value,"muon_isolation_overall_zero","","muon isolation overall only zero entries ","Entries",4,400,0,0.2,1.0,"Test");
+            //std::cout<<" isolation "<<isolation_value<<" ch "<<fmuons_isoCH03[tM]<<" : "<<fmuons_isoNH03[tM]<<" : "<<fmuons_isoPhot03[tM]<<" : "<<fmuons_isoPU03[tM]<<std::endl;
+            }
+            if(isolation_value_second==0){
+            histos->fill1DHist(isolation_value_second,"muon_isolation_overall_zero_second","","muon isolation overall only zero entries ","Entries",4,400,0,0.2,1.0,"Test");
+            //std::cout<<" isolation_second "<<isolation_value_second<<" ch "<<fmuons_isoCH03[tM]<<" : "<<fmuons_isoNH03[tM]<<" : "<<fmuons_isoPhot03[tM]<<" : "<<fmuons_isoPU03[tM]<<std::endl;
+            }
 
-    for( int iM = 0; iM<  fmuons_nMuons;iM++){
-       double isolationValue = (fmuons_isoCH03[iM] + std::max (0.0, fmuons_isoNH03[iM] + fmuons_isoPhot03[iM] - 0.5*(fmuons_isoPU03[iM]) ) )/ fmuons_pt[iM]; 
-       histos->fill1DHist(isolationValue,"muon_isolation_before_selection","","isolation value of muon before any selection","Entries",4,100,0,1.50,1.0,"Test");
-       if( fmuons_pt[iM]<10) continue;
-       if(fabs(fmuons_dz[iM]) >0.5) continue;
+            if(fmuons_isoCH03[tM]==0 && fmuons_isoNH03[tM]==0 && fmuons_isoPhot03[tM]==0 && fmuons_isoPU03[tM]==0){
+            histos->fill1DHist(isolation_value,"muon_isolation_individual_zero","","muon isolation overall : when everything is zero ","Entries",4,400,0,0.2,1.0,"Test");
+            }
+            if(fmuons_isoCH03[tM]==0 && fmuons_isoNH03[tM]==0 && fmuons_isoPhot03[tM]==0){
+            histos->fill1DHist(isolation_value_second,"muon_isolation_second_individual_zero","","muon isolation : when everything is zero ","Entries",4,400,0,0.2,1.0,"Test");
+            }
+
+            if(isolation_value>=2) {
+            if(debug_bool) std::cout<<" isolation value "<<isolation_value<<" charged "<<fmuons_isoCH03[tM]<<" energy : "<<fmuons_isoNH03[tM]<<" photon: "<<fmuons_isoPhot03[tM]<<" PU: "<<fmuons_isoPU03[tM]<<std::endl;
+            }
+            if(isolation_value!=0) {
+            histos->fill1DHist(isolation_value,"muon_isolation_overall_without_zerovalue","","relative isolation I(PF) ","Entries",4,400,0,2,1.0,"Test");
+            } 
+            if(isolation_value_second!=0) {
+            histos->fill1DHist(isolation_value_second,"muon_isolation_second_overall_without_zerovalue","","muon isolation overall (second definition) ","Entries",4,400,0,0.2,1.0,"Test");
+            } 
+
+      }
+
+    // bool passed_flag = false;
+
+    double isolation_value_one, isolation_value_two;
+    std::cout<<"******************"<<std::endl;
+      for( int iM = 0; iM<  fmuons_nMuons;iM++){
+            isolation_value_one = (fmuons_isoCH03[iM] + std::max (0.0, fmuons_isoNH03[iM] + fmuons_isoPhot03[iM] - 0.5*(fmuons_isoPU03[iM]) ) )/ fmuons_pt[iM]; 
+//            isolation_value_04 = (fmuons_isoCH04[tM] + std::max (0.0, fmuons_isoNH04[tM] + fmuons_isoPhot04[tM] - 0.5*(fmuons_isoPU04[tM]) ) )/ fmuons_pt[tM]; 
+//            isolation_value_second = (fmuons_isoCH03[tM] + fmuons_isoNH03[tM] + fmuons_isoPhot03[tM] )/ fmuons_pt[tM]; 
+
+       if(  fmuons_pt[iM]<10) continue;
+       if(fabs(fmuons_dz[iM]) >0.2) continue;
        if(fabs(fmuons_dxy[iM]) >0.2) continue;
-       if(fabs(isolationValue) >0.15) continue;
+       //if(fabs(fmuons_isoCH03[iM]) >2) continue;
+       if(fabs(isolation_value_one) >0.1) continue;
+       // if(fabs(isolation_value_one) >2) continue;
+
+//    std::cout<<"global "<<fmuons_isGlobalMuon[iM]<<std::endl;
+//    std::cout<<"PF "<<fmuons_isPFMuon[iM]<<std::endl;
+//    std::cout<<"tracker "<<fmuons_isTrackerMuon[iM]<<std::endl;
+//    std::cout<<" matches "<<fmuons_numberOfMatches[iM]<<std::endl;
+//    std::cout<<"chi2 "<<fmuons_globalTrackNormalizedChi2[iM]<<std::endl;
+//    std::cout<<"Hits "<<fmuons_globalTrackNumberOfValidMuonHits[iM]<<std::endl;
+//    std::cout<<" track hits "<<fmuons_trackNumberOfValidHits[iM]<<std::endl;
        // New conditions
        if(fmuons_isGlobalMuon[iM] ==false) continue;
        if(fmuons_isPFMuon[iM] ==false) continue;
-       //if(fmuons_isTrackerMuon[iM] ==false) continue; 
-       if(fmuons_globalTrackNormalizedChi2[iM] <0  || fmuons_globalTrackNormalizedChi2[iM] >=10 ) continue;
-
+       if(fmuons_isTrackerMuon[iM] ==false) continue; 
+       if(fmuons_globalTrackNormalizedChi2[iM] >=10 ) continue;
        if(fmuons_globalTrackNumberOfValidMuonHits[iM] <=0 ) continue;
-    	 if(fmuons_numberOfMatchedStations[iM] <=1 ) continue;
-       if(fmuons_trackerValidPixelHits[iM] <=0) continue;
-       if(fmuons_trackerLayers[iM] <=8 ) continue;
+       // being a tracker muon insures that it has valid hits in segments
+       if(fmuons_trackNumberOfValidHits[iM] <=0) continue;
+
        fmuons_isomuondzdxy[iM]=true;
-    }
-    // TO check number of events where we have atleast two isolated muons, this is to check the efficiency of the cut 
-    int nIsolatedMuons = 0;
-    for(int iM = 0; iM < fmuons_nMuons; iM++) {
-      if(fmuons_isomuondzdxy[iM]) {
-        nIsolatedMuons++;
-      }
-    }
-    // Fill histogram for number of isolated muons per event
-    histos->fill1DHist(nIsolatedMuons, "nIsolatedMuons_per_event", "", "Number of isolated muons per event", "Entries", 4, 10, 0.0, 10.0, 1.0, "Test");
-    // Count events with at least 2 isolated muons and only events with atleast 2 isolated muons are considered
-    // ********************** Isolation check done ****************** 
-    if(nIsolatedMuons >= 2) {
-      Nevents_with_two_isolated_muons++;
-    }
-    else{
-      continue;
-    }
-    // ********************** Isolation check done ****************** 
-    bool event_has_trigger_matched_muon = false;
-    if(debug_new) std::cout<<" Isolation checked, now checking trigger matched muons" <<std::endl;
-    for( int iM = 0; iM<  fmuons_nMuons;iM++){
-      if(fmuons_isomuondzdxy[iM] ==false) continue;
-      // Now check if the muon matches with trigger , the leading muon in the event
-      TLorentzVector mu1; 
-      mu1.SetPtEtaPhiM( fmuons_pt[iM], fmuons_eta[iM], fmuons_phi[iM],mass_mu);
-      for(int i=0; i<nb_trigger_matched; i++){
-        TLorentzVector matched_v; 
-        matched_v.SetPtEtaPhiM(pT_matched[i], eta_matched[i], phi_matched[i], mass_mu);
-        double deltaR1_value = mu1.DeltaR(matched_v);
-        histos->fill1DHist(deltaR1_value,"deltaR_isolated_muon_trigger","","deltaR of isolated muon and trigger muon","Entries",4,100,0,5.0,1.0,"Test");
-        if(deltaR1_value <0.3) {
-            histos->fill1DHist(deltaR1_value,"deltaR_isolated_muon_trigger_matched","","deltaR of isolated muon and trigger muon which matched","Entries",4,100,0,5.0,1.0,"Test");
-            if (fmuons_pt[iM] > pT_cut) {
-              event_has_trigger_matched_muon = true;
-              fmuons_matched_trigger[iM] = true;
-              if(debug_new) std::cout<<" yes matched "<<std::endl;
-              histos->fill1DHist(deltaR1_value,"deltaR_isolated_muon_trigger_matched_pTcut","","deltaR of isolated muon and trigger muon which matched with pT>28 GeV","Entries",4,100,0,5.0,1.0,"Test");
-            }
-         }// delta R check done
-       } // end of trigger matched loop
-    } // end of muon loop to check  trigger matched muons
-    if(debug_new) std::cout<<" found trigger matched muon with indices "<<std::endl;
-    // The matched trigger muon should have pT>28 GeV  
-    // This trigger should have pT> 28 GeV
-    for(int i=0; i<nb_trigger_matched; i++){
-      histos->fill1DHist(pT_matched[i],"pT_trigger_before_matching","","pT of trigger muons before matching","Entries",4,100,0,200,1.0,"Test");
-      histos->fill1DHist(eta_matched[i],"eta_trigger_before_matching","","eta of trigger muons before matching","Entries",4,100,-2.5, 2.5,1.0,"Test");
-      histos->fill1DHist(phi_matched[i],"phi_trigger_before_matching","","phi of trigger muons before matching","Entries",4,100,-3.5,3.5,1.0,"Test");
+       passisomuondzdxy =true;
+       TLorentzVector mu1; 
+       
+       for( int jM= iM+1; jM<  fmuons_nMuons ;jM++){
+            isolation_value_two = (fmuons_isoCH03[jM] + std::max (0.0, fmuons_isoNH03[jM] + fmuons_isoPhot03[jM] - 0.5*(fmuons_isoPU03[jM]) ) )/ fmuons_pt[jM]; 
+	        if(fmuons_pt[jM]<10) continue;
+	        if(fabs(fmuons_dz[jM]) >0.2) continue;
+	        if(fabs(fmuons_dxy[jM]) >0.2) continue;
+	        //if(fabs(fmuons_isoCH03[jM]) >2) continue;
+	        if(fabs(isolation_value_two) >0.1) continue;
+	        //if(fabs(isolation_value_two) >2) continue;
+       
+          if(fmuons_isGlobalMuon[jM] ==false) continue;
+          if(fmuons_isPFMuon[jM] ==false) continue;
+          if(fmuons_globalTrackNormalizedChi2[jM] >=10 ) continue;
+          if(fmuons_globalTrackNumberOfValidMuonHits[jM] <=0 ) continue;
+          if(fmuons_isTrackerMuon[jM] ==false) continue; // being a tracker muon insures that it has valid hits in segments
+          if(fmuons_trackNumberOfValidHits[jM] <=0) continue;
+
+//          std::cout<<" charge "<<fmuons_charge[iM]<<" other charge "<<fmuons_charge[jM]<<std::endl;
+          if(fmuons_charge[iM] ==fmuons_charge[jM]) continue;
+
+	        TLorentzVector mu2;
+	        mu1.SetPtEtaPhiM( fmuons_pt[iM], fmuons_eta[iM], fmuons_phi[iM],mass_mu);
+	        mu2.SetPtEtaPhiM( fmuons_pt[jM], fmuons_eta[jM], fmuons_phi[jM],mass_mu);
+	        mass = (mu1+mu2).Mag();
+	 
+	        if(mass>=70&&mass<110){ 
+	           passZmumusel= true;
+
+	           fmuons_Zcand[iM]=true; 
+	           fmuons_Zcand[jM]=true; 
+						 iso_PF_first = isolation_value_one;
+						 iso_PF_second = isolation_value_two;
+	           z_pt = (mu1+mu2).Pt();
+	           z_eta = (mu1+mu2).Eta();
+	           z_phi = (mu1+mu2).Phi();
+	           z_mass = (mu1+mu2).Mag();
+
+          }
+       if(debug_new) std::cout<<" eveent number "<<fEvent<<std::endl;
+       if(debug_new) std::cout<<"event passed muons "<<iM<<" : "<<jM<<" mass "<<z_mass<<" number of muons "<<fmuons_nMuons<<std::endl;
+			 isolation1 = fabs(isolation_value_one);
+			 isolation2 = fabs(isolation_value_two);
+ //      std::cout<<" eta first "<<fmuons_eta[iM]<<" eta second "<<fmuons_eta[jM]<<" phi first "<<fmuons_phi[iM]<<" phi second "<<fmuons_phi[jM]<<std::endl;
+       }
      }
+    std::cout<<"******************"<<std::endl;
 
-    // ********************** Trigger matched check done ****************** 
-    if (!event_has_trigger_matched_muon) {
-     Nevents_not_trigger_matched++;
-    continue;
-    } else {
-    Nevents_trigger_matched++;
-    }
-     // ********************** Trigger matched check done ****************** 
-    // Plotting pT, eta, phi for muons which mattched the trigger and also pT, eta, phi for trigger muons which matched
-    // One can ignore this sanity check plots
-    for(int iM=0; iM< fmuons_nMuons; iM++){
-      if(fmuons_matched_trigger[iM] ==true){
-        histos->fill1DHist(fmuons_pt[iM],"pT_matched_trigger","","pT of trigger matched muons","Entries",4,100,0,200,1.0,"Test");
-        histos->fill1DHist(fmuons_eta[iM],"eta_matched_trigger","","eta of trigger matched muons","Entries",4,100,-2.5,2.5,1.0,"Test");
-        histos->fill1DHist(fmuons_phi[iM],"phi_matched_trigger","","phi of trigger matched muons","Entries",4,100,-3.5,3.5,1.0,"Test");
-      }
-    }
-    for(int i=0; i<nb_trigger_matched; i++){
-      if(pT_matched[i] <pT_cut) continue;
-      histos->fill1DHist(pT_matched[i],"pT_trigger_after_matching","","pT of trigger muons after matching","Entries",4,100,0,200,1.0,"Test");
-      histos->fill1DHist(eta_matched[i],"eta_trigger_after_matching","","eta of trigger muons after matching","Entries",4,100,-2.5, 2.5,1.0,"Test");
-      histos->fill1DHist(phi_matched[i],"phi_trigger_after_matching","","phi of trigger muons after matching","Entries",4,100,-3.5,3.5,1.0,"Test");
-     }
-    // *********************** Zmuon building done ****************** 
-    // Now we build the Z candidate with the trigger matched muon and other muon of atleast 10 GeV and put selections on the Z candidate
-     for(int iM=0 ; iM< fmuons_nMuons; iM++){
-        if(fmuons_isomuondzdxy[iM] ==false) continue;
-        for(int jM=iM+1; jM< fmuons_nMuons; jM++){
-            if(fmuons_isomuondzdxy[jM] ==false) continue;
-             if(fmuons_charge[iM] ==fmuons_charge[jM]) continue;
-
-             if(debug_new) std::cout<<" checking muon pair "<<iM<<" : "<<jM<<" trigger matching "<<fmuons_matched_trigger[iM]<<" : "<<fmuons_matched_trigger[jM]<<std::endl;
-             if(fmuons_matched_trigger[iM] ==false && fmuons_matched_trigger[jM] ==false) continue;
-             TLorentzVector mu1;
-             TLorentzVector mu2;
-             mu1.SetPtEtaPhiM( fmuons_pt[iM], fmuons_eta[iM], fmuons_phi[iM],mass_mu);
-             mu2.SetPtEtaPhiM( fmuons_pt[jM], fmuons_eta[jM], fmuons_phi[jM],mass_mu);
-             mass = (mu1+mu2).Mag();
- 
-	          if(mass>=70&&mass<110){ 
-               double mass_diff = abs(mass - nominal_mass);
-               nZcandidates++;
-               // The Z pair is only acceptable when the mass difference is less than 10 GeV
-               if(abs(mass_diff) > 10) continue;
-               nZcandidates_narrow++;
-               // The Z pair is only acceptable when the mass difference is less than 10 GeV
-					 	  // In case we already had a possible Z canddiate, and now we found another Z candidate, ie. multiple Z candidate case
-               if(mass_diff < best_mass_diff){  
-                best_mass_diff = mass_diff;
-                first_index = iM;
-                second_index = jM;
-                z_mass = mass;
-                z_pt = (mu1 + mu2).Pt();
-                z_eta = (mu1 + mu2).Eta();
-                z_phi = (mu1 + mu2).Phi();
-
-                passZmumusel = true;
-                isolation_value_one = (fmuons_isoCH03[iM] + std::max (0.0, fmuons_isoNH03[iM] + fmuons_isoPhot03[iM] - 0.5*(fmuons_isoPU03[iM]) ) )/ fmuons_pt[iM]; 
-                isolation_value_two = (fmuons_isoCH03[jM] + std::max (0.0, fmuons_isoNH03[jM] + fmuons_isoPhot03[jM] - 0.5*(fmuons_isoPU03[jM]) ) )/ fmuons_pt[jM]; 
-                iso_PF_first = isolation_value_one;  
-                iso_PF_second = isolation_value_two;
-
-			          isolation1 = fabs(isolation_value_one);
-			          isolation2 = fabs(isolation_value_two);
-               }
-              }// end of mass selection
-             if(debug_new) std::cout<<"event passed muons "<<iM<<" : "<<jM<<" mass "<<z_mass<<" number of muons "<<fmuons_nMuons<<"mass Z "<<z_mass<<" : "<<fmuons_globalTrackNormalizedChi2[iM]<<" : "<<fmuons_globalTrackNormalizedChi2[jM]<<std::endl;
-         }// end of muon pair loop
-       }// end of muon loop
-      // To check the efficiency of the 70-110 GeV cut
-      if (nZcandidates == 1 || nZcandidates == 2) passed_Zevents_full_range++;
-      else { not_passed_Zevents_full_range++;}
-
-      // Important
-      // To check the efficiency of the cut of 10 GeV on mass window and know which events to keep
-      if (nZcandidates_narrow == 1 || nZcandidates_narrow == 2) passed_Zevents++;
-      else { 
-        if(nZcandidates_narrow==0) not_passed_Zevents_zero++; 
-        else not_passed_Zevents_multiple++;  
-        not_passed_Zevents++;
-        passZmumusel = false;
-        }
-      if(debug_new) std::cout<<" number of Z candidates "<<nZcandidates_narrow<<std::endl;
+			if(passisomuondzdxy ==false) continue;
 			if(passZmumusel ==false) continue;
-      if(debug_new) std::cout<<" event passed all selections "<<std::endl;
-      // *********************** Zmuon selection done ****************** 
-       // More checks to make sure that the muon indices are valid before extracting the individual muons corresponding to the indices
-       if (first_index < fmuons_nMuons && second_index < fmuons_nMuons &&
-           first_index < fmuons_nMuons && second_index < fmuons_nMuons  &&
-           first_index < fmuons_nMuons && second_index < fmuons_nMuons ) { 
-           valid_muon_indices++;
-        }
-        else {
-          if(debug_new) std::cout<<"Muon indices are out of bounds: first_index="<<first_index<<", second_index="<<second_index<<std::endl;
-          non_valid_muon_indices++;
-          continue;
-        }
-        if(debug_new) std::cout<<" number of valid muon indices "<<valid_muon_indices<<std::endl;
-        if(debug_new) std::cout<<" number of non valid muon indices "<<non_valid_muon_indices<<std::endl;
+     // making plots for only muons which passed the cuts
+/*      for(int tM=0; tM< fmuons_nMuons;tM++){
+            isolation_value = (fmuons_isoCH03[tM] + std::max (0.0, fmuons_isoNH03[tM] + fmuons_isoPhot03[tM] - 0.5*(fmuons_isoPU03[tM]) ) )/ fmuons_pt[tM]; 
+            isolation_value_04 = (fmuons_isoCH04[tM] + std::max (0.0, fmuons_isoNH04[tM] + fmuons_isoPhot04[tM] - 0.5*(fmuons_isoPU04[tM]) ) )/ fmuons_pt[tM]; 
+            histos->fill1DHist(isolation_value,"muon_isolation_overall_passed_events","","muon isolation overall for events that passed Z selections ","Entries",4,400,0,0.1,1.0,"Test");
+            histos->fill1DHist(isolation_value_04,"muon_isolation_overall_04_passed_events","","muon isolation for events that passed Z seelctions (radius- 0.4) ","Entries",4,400,0,0.1,1.0,"Test");
+        } */
 
-       // Check if both muons pass the isolation and dxy cuts  : redundant sanity check
-			 if(fmuons_isomuondzdxy[first_index] ==false) continue;
-			 if(fmuons_isomuondzdxy[second_index] ==false) continue;
-       fmuons_Zcand[first_index]=true; 
-       fmuons_Zcand[second_index]=true; 
-
+      
       for(int tM=0; tM< fmuons_nMuons;tM++){
-          if(fmuons_Zcand[tM]==true && fmuons_isomuondzdxy[tM]==true)  
-           histos->fill1DHist(fmuons_pt[tM],"muon_pT_events_from_Z","","muon pT for those muons which passes Z selection ","Entries",4,100,0,200,1.0,"Test");
-      }// end of for loop iterating over all muons to fill muon pT andz_mass
+         
+          if(fmuons_Zcand[tM]==true && fmuons_isomuondzdxy[tM]==true) { 
+          //histos->fill1DHist(fmuons_isoCH03[tM],"muon isolation for muon coming from Z","","muon isolation for those muons which passes Z selection ","Entries",4,2000,0,1.0,1.0,"Test");
+          histos->fill1DHist(fmuons_pt[tM],"muon pt for muon coming from Z","","muon isolation for those muons which passes Z selection ","Entries",4,100,0,200,1.0,"Test");
+          if(fmuons_pt[tM] < 10) { std::cout<<" muon pt which is less than 10 "<<fmuons_pt[tM]<<std::endl;
+          
+            histos->fill1DHist(z_mass,"Zmass_pT_less_10GeV","","zmass for events coming from pT<10 GeV muons ","Entries",4, 100,70,100.0,1.0,"Test");
+            total_failed++;
+            break;
+           }
+          }
+
+      }
+      std::cout<<" total number of events which will not  passed the isolation 0.2 "<<passed_events<<std::endl;
 
     histos->fill1DHist(z_mass,"Zmass","","mass : Z","Entries/(0.4GeV)",4,100,70,110.0,1.0,"Test");
     histos->fill1DHist(z_pt,"Zpt","","pT : Z","Entries",4,100,0,200.0,1.0,"Test");
     histos->fill1DHist(z_phi,"Zphi","","#phi : Z","Entries",4,100,-pi,pi,1.0,"Test");
     histos->fill1DHist(z_eta,"Zeta","","#eta : Z","Entries",4,100,-2.5,2.5,1.0,"Test");
+//		 if(fRun == 302448 ) {std::cout<<" these runs  started processing and done "<<fRun<<std::endl; }
 
-    if(runnb_previous_event != fRun ||   lumis_previous_event !=  fLumiSect)   _instlumi =instlumi(fRun, fLumiSect, year) ;
+  //    if(fRun != 302042 && fRun!= 302043 && fRun != 302131 && fRun != 302159 && fRun != 302163 && fRun != 302165 && fRun != 302166 &&  fRun != 302225 && fRun != 302228) continue;    
+     //if(fRun != 302229 && fRun!= 302240 && fRun != 302262 && fRun != 302263) continue;    
+		 
+     // if(fRun != 302277 && fRun!= 302279 && fRun != 302280 && fRun != 302322 && fRun != 302328 && fRun != 302337 && fRun != 302342 &&  fRun != 302343 && fRun != 302344 && fRun!=302350) continue;    
+    //if(fRun != 302388 && fRun!= 302392 && fRun != 302393 && fRun != 302448 ) continue;    
+    //if(fRun != 302388) continue;    
+
+     if(runnb_previous_event != fRun ||   lumis_previous_event !=  fLumiSect)   _instlumi =instlumi(fRun, fLumiSect, year) ;
+    
 		float intlumi_to_add; 
      if(runnb_previous_event != fRun )
 			{ 
@@ -1415,8 +1243,11 @@ for(Int_t ient=0;ient<nentries;ient++) {
      if(debug_bool) std::cout<<" going for the event   "<<fRun<<std::endl; 
      runnb_previous_event =fRun; 
      lumis_previous_event =  fLumiSect ;
+     
+
      // get Run, Event, Start, End
      Int_t key_run=(Int_t)fRun;
+
      if(m_RunEvent.find(key_run) == m_RunEvent.end()) {
        m_RunEvent[key_run]=0;
        m_Run_usedevents[key_run]=0;
@@ -1428,21 +1259,25 @@ for(Int_t ient=0;ient<nentries;ient++) {
      m_RunEvent[key_run]=m_RunEvent[key_run]+1;
      if(ftimeSecond>m_RunEnd[key_run]) m_RunEnd[key_run]=ftimeSecond;
      if(ftimeSecond<m_RunStart[key_run]) m_RunStart[key_run]=ftimeSecond;
+
      //************************************************************************
      // Check the presence of needed and not empty vectors
      //************************************************************************
+
      Int_t recsegtrk=0;
      if(frecHits2D_nRecHits2D > 0) recsegtrk=recsegtrk+1;
      if(fcscSegments_recHitRecord_endcap->size() > 0) recsegtrk=recsegtrk+2;
      if(fmuons_cscSegmentRecord_nRecHits->size() > 0) {
        Int_t ncscsegm=0;
        for(UInt_t i=0;i<fmuons_cscSegmentRecord_nRecHits->size();i++) 
-	   if((*fmuons_cscSegmentRecord_nRecHits)[i].size() > 0) ncscsegm++; 
+	 if((*fmuons_cscSegmentRecord_nRecHits)[i].size() > 0) ncscsegm++; 
        if(ncscsegm > 0) recsegtrk=recsegtrk+4;
      }
      histos->fill1DHist((Float_t)recsegtrk,"recsegtrk","","Bit 1-RecHits2D, Bit 2-Segments and Bit 3-Tracks per event","Entries",4,8,0.0,8.0,1.0,"Test");
+  
      if(recsegtrk==7) { // Analyse event only when all 3 vectors not empty //Laurent: this ensures there's at least 1 rechit, 1 segment and 1 muon associated to them (??)
-     if(ient<flag_print) cout<<endl<<"*** "<<ient+1<< " Event "<<fEvent<<endl;
+      if(ient<flag_print) cout<<endl<<"*** "<<ient+1<< " Event "<<fEvent<<endl;
+
 
      //*****************************************************************
      //  Treat ME1/4 differently (due 3 strips ganging),
@@ -1509,7 +1344,7 @@ for(Int_t ient=0;ient<nentries;ient++) {
 
      } // end of if(recsegtrk==7)
   } // end of  for(Int_t ient=0;
-  std::cout<<" passed Events m"<<passed_Zevents<<std::endl;
+  std::cout<<" total muons with pT<10 GeV"<<total_failed<<std::endl;
  
   if(debug_bool) std::cout<<"end of entry loop and reseting tree branches now : entry "<<_eventNb<<std::endl;
   tree->ResetBranchAddresses();
@@ -1517,6 +1352,7 @@ for(Int_t ient=0;ient<nentries;ient++) {
   //************************************************************************
   // End of tree analysis printout
   //**************************************************************************
+
   cout<<" going to print out tree details"<<std::endl;
   Int_t cnt=0,cnt_readin=0,cnt_used=0,cnt_usedhits=0;
   for(std::map<Int_t,Int_t>::iterator It=m_RunEvent.begin(); It!= m_RunEvent.end();++It) {
@@ -1529,22 +1365,6 @@ for(Int_t ient=0;ient<nentries;ient++) {
      cout<<cnt<<" Run  Events  Start  End  Duration  Used events  Used hits "<<key<<" "<<(*It).second<<" "<<m_RunStart[key]<<" "<<m_RunEnd[key]<<" "<<dur<<" "<<m_Run_usedevents[key]<<" "<<m_Run_usedhits[key]<<endl;
        }
   cout<<"--------------------------------------------------"<<endl;
-	std::cout<<" Valid muon indices "<<valid_muon_indices<<std::endl;
-	std::cout<<" Non valid muon indices "<<non_valid_muon_indices<<std::endl;
-
-  std::cout<<" total number of events "<<nentries<<std::endl;
-  std::cout<<" total  isolated events "<<Nevents_with_two_isolated_muons<<std::endl;
-  std::cout<<" total trigger matched events "<<Nevents_trigger_matched<<std::endl;
-  std::cout<<" total not trigger matched events "<<Nevents_not_trigger_matched<<std::endl;
-  std::cout<<" total not trigger matched events by pT cut "<<Nevents_not_trigger_matched_pTcut<<std::endl;
-
-	std::cout<<" total Z events  "<<passed_Zevents<<std::endl;
-	std::cout<<" total not Z events  "<<not_passed_Zevents<<std::endl;
-	std::cout<<" total not Z events with zero Z candidates  "<<not_passed_Zevents_zero<<std::endl;
-	std::cout<<" total not Z events with multiple Z candidates  "<<not_passed_Zevents_multiple<<std::endl;
-	std::cout<<" total Z events wider range "<<passed_Zevents_full_range<<std::endl;
-	std::cout<<" total not Z events wider range "<<not_passed_Zevents_full_range<<std::endl;
-
   cout<<"Total used hits "<<cnt_usedhits<<" in "<<cnt_used<<" used events  from "<<cnt_readin<<" read in events in "<<m_RunEvent.size()<<" runs"<<endl;
   cout<<endl;
   cout<<" End of AnalysisGasGain::CycleTree "<<endl;
