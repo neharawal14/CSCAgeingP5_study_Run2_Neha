@@ -102,8 +102,8 @@ private:
            me31YlocHVsgmLow[3],   me31YlocHVsgmHigh[3],
            me41YlocHVsgmLow[3],   me41YlocHVsgmHigh[3],
            me234_2YlocHVsgmLow[5],me234_2YlocHVsgmHigh[5];
-  TFile * myoutfilefortree[33] ;
-  TTree * outputtree[40]; //output tree 
+  TFile * myoutfilefortree1 ;
+  TTree * outputtree1; //output tree 
   //Format is the following: 
   //treeME11a
   //treeME11b

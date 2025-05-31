@@ -6,6 +6,7 @@
 #SBATCH --mem=200MB
 #SBATCH --qos=avery
 #SBATCH --cpus-per-task=1
+#SBATCH --constraint=el8
 # Get line N from filelist.txt where N = SLURM_ARRAY_TASK_ID
 # Default filelist if not passed
 #: "${FILELIST:=filelist_2016C.txt}"
@@ -15,6 +16,5 @@ input_file=$(echo $line | cut -d' ' -f1)
 output_file=$(echo $line | cut -d' ' -f2)
 
 echo "Processing file: $input_file_$output_file"
-
 # Run your analysis
 ./single_file_run.sh "$input_file" "$output_file" "2016"

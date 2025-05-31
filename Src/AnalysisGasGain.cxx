@@ -1054,13 +1054,13 @@ fmuons_cscSegmentRecord_localX    = 0;
   int Nevents_not_trigger_matched_pTcut = 0;
   int Nevents_with_two_isolated_muons = 0;
 
-  double pT_cut = 30;
+  double pT_cut = 28;
 
 for(Int_t ient=0;ient<nentries;ient++) {
-//  for(Int_t ient=0;ient<100;ient++) {
+//  for(Int_t ient=0;ient<5;ient++) {
    
   //if(debug_program)  std::cout<<"time to load a entry"<<std::endl;
-//    std::cout<<"time to load a entry"<<std::endl;
+     if(debug_new) std::cout<<"time to load a entry"<<ient<<std::endl;
      b_Run->GetEntry(ient);
      b_Event->GetEntry(ient);
      b_LumiSect->GetEntry(ient);
@@ -1148,6 +1148,7 @@ for(Int_t ient=0;ient<nentries;ient++) {
 		 _temperature =0;
      double mass_mu = 0.1056; 
      if(debug_bool)  std::cout<<"loading of branches done`"<<std::endl;
+     if(debug_new) std::cout<<"year "<<year<<std::endl;
 
 
     // Variables to count the events passing each selection step
@@ -1171,7 +1172,7 @@ for(Int_t ient=0;ient<nentries;ient++) {
     double best_mass_diff = 999.0;
 
      histos->fill1DHist(fmuons_nMuons,"number_muons_per_event","","Total number of muons per event","Entries",4,10,0.0,10.0,1.0,"Test");   
-     if(debug_new) std::cout<<" number of muons in the event "<<fmuons_nMuons<<std::endl;
+     if(debug_new) std::cout<<" number of muons in the event "<<ient<<" : "<<fmuons_nMuons<<std::endl;
      // Checking pT, eta, phi , isolation value for each muon
      for(int tM=0; tM< fmuons_nMuons;tM++){
             isolation_value = (fmuons_isoCH03[tM] + std::max (0.0, fmuons_isoNH03[tM] + fmuons_isoPhot03[tM] - 0.5*(fmuons_isoPU03[tM]) ) )/ fmuons_pt[tM]; 
@@ -1210,7 +1211,10 @@ for(Int_t ient=0;ient<nentries;ient++) {
     // Need to build the Z candidate with the trigger matched muon and other muon of atleast 10 GeV and put selections on the Z candidate
 
     for( int iM = 0; iM<  fmuons_nMuons;iM++){
-       double isolationValue = (fmuons_isoCH03[iM] + std::max (0.0, fmuons_isoNH03[iM] + fmuons_isoPhot03[iM] - 0.5*(fmuons_isoPU03[iM]) ) )/ fmuons_pt[iM]; 
+       //double isolationValue = (fmuons_isoCH03[iM] + std::max (0.0, fmuons_isoNH03[iM] + fmuons_isoPhot03[iM] - 0.5*(fmuons_isoPU03[iM]) ) )/ fmuons_pt[iM]; 
+       double isolationValue = (fmuons_isoCH04[iM] + std::max (0.0, fmuons_isoNH04[iM] + fmuons_isoPhot04[iM] - 0.5*(fmuons_isoPU04[iM]) ) )/ fmuons_pt[iM]; 
+       if(debug_new) std::cout<<" muon "<<iM<<" : "<<fmuons_pt[iM]<<" : "<<fmuons_eta[iM]<<" : "<<fmuons_phi[iM]<<" : "<<fmuons_dz[iM]<<" : "<<fmuons_dxy[iM]<<" : isolation : "<<isolationValue<<std::endl;
+       if(debug_new) std::cout<<" isGlobalmuon :"<<fmuons_isGlobalMuon[iM]<<" : isPFMuon "<<fmuons_isPFMuon[iM]<<" : isTrackerMuon "<<fmuons_isTrackerMuon[iM]<<" : globalTrackNormalizedChi2 "<<fmuons_globalTrackNormalizedChi2[iM]<<" : globalTrackNumberOfValidMuonHits "<<fmuons_globalTrackNumberOfValidMuonHits[iM]<<" : numberOfMatchedStations "<<fmuons_numberOfMatchedStations[iM]<<" : trackerValidPixelHits "<<fmuons_trackerValidPixelHits[iM]<<" : trackerLayers "<<fmuons_trackerLayers[iM]<<std::endl;
        histos->fill1DHist(isolationValue,"muon_isolation_before_selection","","isolation value of muon before any selection","Entries",4,100,0,1.50,1.0,"Test");
        if( fmuons_pt[iM]<10) continue;
        if(fabs(fmuons_dz[iM]) >0.5) continue;
@@ -1225,8 +1229,9 @@ for(Int_t ient=0;ient<nentries;ient++) {
        if(fmuons_globalTrackNumberOfValidMuonHits[iM] <=0 ) continue;
     	 if(fmuons_numberOfMatchedStations[iM] <=1 ) continue;
        if(fmuons_trackerValidPixelHits[iM] <=0) continue;
-       if(fmuons_trackerLayers[iM] <=8 ) continue;
+       if(fmuons_trackerLayers[iM] <=5 ) continue;
        fmuons_isomuondzdxy[iM]=true;
+       if(debug_new) std::cout<<" muon "<<iM<<" passed all selections and iso bool "<<fmuons_isomuondzdxy[iM]<<std::endl;
     }
     // TO check number of events where we have atleast two isolated muons, this is to check the efficiency of the cut 
     int nIsolatedMuons = 0;
@@ -1237,6 +1242,7 @@ for(Int_t ient=0;ient<nentries;ient++) {
     }
     // Fill histogram for number of isolated muons per event
     histos->fill1DHist(nIsolatedMuons, "nIsolatedMuons_per_event", "", "Number of isolated muons per event", "Entries", 4, 10, 0.0, 10.0, 1.0, "Test");
+    if(debug_new) std::cout<<" number of isolated muons "<<nIsolatedMuons<<std::endl;
     // Count events with at least 2 isolated muons and only events with atleast 2 isolated muons are considered
     // ********************** Isolation check done ****************** 
     if(nIsolatedMuons >= 2) {
@@ -1247,7 +1253,10 @@ for(Int_t ient=0;ient<nentries;ient++) {
     }
     // ********************** Isolation check done ****************** 
     bool event_has_trigger_matched_muon = false;
-    if(debug_new) std::cout<<" Isolation checked, now checking trigger matched muons" <<std::endl;
+    if(debug_new) std::cout<<" Isolation checked, now checking trigger matched muons : number of trigger Matched" <<nb_trigger_matched<<std::endl;
+    for(int i=0; i<nb_trigger_matched; i++){
+    if(debug_new) std::cout<<"pT matched "<<i<<" : "<<pT_matched[i]<<" : eta "<<eta_matched[i]<<" : phi "<<phi_matched[i]<<std::endl;
+    }
     for( int iM = 0; iM<  fmuons_nMuons;iM++){
       if(fmuons_isomuondzdxy[iM] ==false) continue;
       // Now check if the muon matches with trigger , the leading muon in the event
@@ -1258,12 +1267,14 @@ for(Int_t ient=0;ient<nentries;ient++) {
         matched_v.SetPtEtaPhiM(pT_matched[i], eta_matched[i], phi_matched[i], mass_mu);
         double deltaR1_value = mu1.DeltaR(matched_v);
         histos->fill1DHist(deltaR1_value,"deltaR_isolated_muon_trigger","","deltaR of isolated muon and trigger muon","Entries",4,100,0,5.0,1.0,"Test");
+        if(debug_new) std::cout<<"deltaR1_value for muon "<<iM<<" : "<<deltaR1_value<<" : pT "<<fmuons_pt[iM]<<" : eta "<<fmuons_eta[iM]<<" : phi "<<fmuons_phi[iM]<<" : pT matched "<<pT_matched[i]<<" : eta matched "<<eta_matched[i]<<" : phi matched "<<phi_matched[i]<<std::endl;
         if(deltaR1_value <0.3) {
             histos->fill1DHist(deltaR1_value,"deltaR_isolated_muon_trigger_matched","","deltaR of isolated muon and trigger muon which matched","Entries",4,100,0,5.0,1.0,"Test");
+            if(debug_new) std::cout<<" yes matched "<<std::endl;
             if (fmuons_pt[iM] > pT_cut) {
+              if(debug_new) std::cout<<" yes matched pT cut "<<std::endl;
               event_has_trigger_matched_muon = true;
               fmuons_matched_trigger[iM] = true;
-              if(debug_new) std::cout<<" yes matched "<<std::endl;
               histos->fill1DHist(deltaR1_value,"deltaR_isolated_muon_trigger_matched_pTcut","","deltaR of isolated muon and trigger muon which matched with pT>28 GeV","Entries",4,100,0,5.0,1.0,"Test");
             }
          }// delta R check done
@@ -1280,8 +1291,9 @@ for(Int_t ient=0;ient<nentries;ient++) {
 
     // ********************** Trigger matched check done ****************** 
     if (!event_has_trigger_matched_muon) {
-     Nevents_not_trigger_matched++;
-    continue;
+      if(debug_new) std::cout<<" no trigger matched muon found "<<std::endl;
+      Nevents_not_trigger_matched++;
+      continue;
     } else {
     Nevents_trigger_matched++;
     }
@@ -1342,6 +1354,7 @@ for(Int_t ient=0;ient<nentries;ient++) {
 
 			          isolation1 = fabs(isolation_value_one);
 			          isolation2 = fabs(isolation_value_two);
+                if(debug_new) std::cout<<" best mass diff "<<mass_diff<<" : first index "<<first_index<<" : second index "<<second_index<<" : z mass "<<z_mass<<" : z pt "<<z_pt<<" : z eta "<<z_eta<<" : z phi "<<z_phi<<std::endl;
                }
               }// end of mass selection
              if(debug_new) std::cout<<"event passed muons "<<iM<<" : "<<jM<<" mass "<<z_mass<<" number of muons "<<fmuons_nMuons<<"mass Z "<<z_mass<<" : "<<fmuons_globalTrackNormalizedChi2[iM]<<" : "<<fmuons_globalTrackNormalizedChi2[jM]<<std::endl;

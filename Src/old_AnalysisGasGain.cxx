@@ -133,6 +133,41 @@ void AnalysisGasGain::Setup(Int_t fstat,Int_t fprint,string inp,string out, stri
 
 void AnalysisGasGain::SetupTree(){
   //this->SetupPrint();
+    TString filetreelocation = (TString) histrootname;
+    filetreelocation.ReplaceAll(".root","_tree.root");
+    myoutfilefortree1 = new TFile(filetreelocation,"RECREATE"); 
+    outputtree1 = new TTree("tree","tree");
+    outputtree1->Branch("_passZmumusel",   &passZmumusel,   "_passZmumusel/O");
+    outputtree1->Branch("_passisomuondzdxy",   &passisomuondzdxy,   "_passisomuondzdxy/O");
+    outputtree1->Branch("_eventNb",   &_eventNb,   "_eventNb/l");
+    outputtree1->Branch("_runNb",   &_runNb,   "_runNb/l");
+    outputtree1->Branch("_lumiBlock",   &_lumiBlock,   "_lumiBlock/l");
+    outputtree1->Branch("_rhid",&_rhid,"_rhid/I");
+    outputtree1->Branch("_stationring",&_stationring,"_stationring/I");
+    outputtree1->Branch("_rhsumQ",&_rhsumQ,"_rhsumQ/D");
+    outputtree1->Branch("_rhsumQ_RAW",&_rhsumQ_RAW,"_rhsumQ_RAW/D");
+    outputtree1->Branch("_HV",&_HV,"_HV/D");
+    outputtree1->Branch("_current",&_current,"_current/D");
+    outputtree1->Branch("_pressure",&_pressure,"_pressure/D");
+    outputtree1->Branch("_temperature",&_temperature,"_temperature/D");
+    outputtree1->Branch("_instlumi",&_instlumi,"_instlumi/D");
+    outputtree1->Branch("_integratelumi",&_integratelumi,"_integratelumi/D");
+    outputtree1->Branch("_timesecond",&_timesecond,"_timesecond/i") ;
+    outputtree1->Branch("_n_PV",&_n_PV,"_n_PV/I");
+    outputtree1->Branch("_bunchcrossing",&_bunchcrossing,"_bunchcrossing/I");
+    outputtree1->Branch("_etamuon",&_etamuon,"_etamuon/D");
+    outputtree1->Branch("_phimuon",&_phimuon,"_phimuon/D");
+    outputtree1->Branch("_ptmuon",&_ptmuon,"_ptmuon/D");
+	  outputtree1->Branch("iso_PF_first",&iso_PF_first,"iso_PF_first/D");
+	  outputtree1->Branch("iso_PF_second",&iso_PF_second,"iso_PF_second/D");
+	  outputtree1->Branch("z_pt",&z_pt,"z_pt/D");
+    outputtree1->Branch("z_eta",&z_eta,"z_eta/D");
+    outputtree1->Branch("z_phi",&z_phi,"z_phi/D");
+    outputtree1->Branch("z_mass",&z_mass,"z_mass/D");
+    outputtree1->Branch("isolation1",&isolation1,"isolation1/D");
+    outputtree1->Branch("isolation2",&isolation2,"isolation2/D");
+
+/*
   for(int i = 0; i <32;i++){
 		if(debug_bool) std::cout<<"creating trees for all the segments"<<std::endl;
     TString treename =GetRegionName(i);
@@ -177,7 +212,7 @@ void AnalysisGasGain::SetupTree(){
 		if(debug_bool) std::cout<<" branches declared succesfully for all the segments"<<std::endl;
 		if(debug_bool) std::cout<<"Setup did perfeclty  "<<std::endl;
   }
-
+*/
 }
 
 /* *********************** SetupPrint ************************************* */
@@ -249,16 +284,19 @@ void AnalysisGasGain::Analyze(HistMan *histos) {
   CycleTree(histos);
 	if(debug_bool) std::cout<<"eror in clearing hist maps"<<std::endl;
   histos->ClearHistMaps();
-  for(int i = 0; i<32;i++){
-	if(debug_bool) std::cout<<"issue when we try to enter individual trees "<<std::endl;
-  myoutfilefortree[i]->cd();
-	if(debug_bool) std::cout<<"issue when we try to fill individual trees "<<std::endl;
-  outputtree[i]->Write();
-	if(debug_bool) std::cout<<"issue when we try to close individual trees "<<std::endl;
-  myoutfilefortree[i]->Close();
-
-  }
-	
+  myoutfilefortree1->cd();
+  outputtree1->Write();
+  myoutfilefortree1->Close();
+///  for(int i = 0; i<32;i++){
+///	if(debug_bool) std::cout<<"issue when we try to enter individual trees "<<std::endl;
+///  myoutfilefortree[i]->cd();
+///	if(debug_bool) std::cout<<"issue when we try to fill individual trees "<<std::endl;
+///  outputtree[i]->Write();
+///	if(debug_bool) std::cout<<"issue when we try to close individual trees "<<std::endl;
+///  myoutfilefortree[i]->Close();
+///
+///  }
+///	
 	if(debug_bool) std::cout<<"output will be there  "<<std::endl;
 }
 
@@ -753,8 +791,9 @@ ostringstream ss;
         histos->fill1DHist((Float_t)_rhsumQ_RAW,"charge_for_selected_hits","","ADC charge for final used rechits","Entries",4,100,0.0,3000.0,1.0,"Test");
 	    int iregion = GetRegionIdx(station,ring,hvsgm);
 			if(debug_bool_region)std::cout<<" value of the region in each rechit "<<iregion<<" charge "<<_rhsumQ<<" event Nb"<<_eventNb<<" hv segment "<<hvsgm<<std::endl;
-	    if(iregion >=0)  outputtree[iregion]->Fill();
-	    else cout <<"region not found! " <<endl;
+	    outputtree1->Fill();
+//	    if(iregion >=0)  outputtree[iregion]->Fill();
+//	    else cout <<"region not found! " <<endl;
 	    
 	   if(debug_bool) std::cout<<" found the region and filled variables : run : event "<<_runNb<<" "<<_eventNb<<std::endl;
 
