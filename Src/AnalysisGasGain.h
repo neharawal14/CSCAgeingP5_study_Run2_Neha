@@ -83,6 +83,7 @@ private:
   Double_t fmuons_isoPU04[200] ; 
 
   Bool_t fmuons_Zcand[200];
+  Bool_t fmuons_TightId[200];
   Bool_t fmuons_isomuondzdxy[200];
   Bool_t fmuons_matched_trigger[200];
   // New muon variable we are adding so can apply tight ID

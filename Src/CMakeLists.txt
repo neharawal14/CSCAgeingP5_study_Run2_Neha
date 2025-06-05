@@ -11,7 +11,8 @@ find_package(ROOT REQUIRED CONFIG)
 
 # Generate ROOT dictionary
 root_generate_dictionary(G__Analysis
-  AnalysisGasGain.h
+	AnalysisGasGain.h
+	#old_AnalysisGasGain.h
   HistMan.h
   ChargeORIGandInstL.h
   me11.h
@@ -22,7 +23,8 @@ root_generate_dictionary(G__Analysis
 
 # Create shared library
 add_library(Analysis SHARED
-  AnalysisGasGain.cxx
+	AnalysisGasGain.cxx
+	#old_AnalysisGasGain.cxx
   HistMan.cxx
   ChargeORIGandInstL.C
   me11.C

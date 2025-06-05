@@ -433,7 +433,7 @@ void AnalysisGasGain::GetSegments(HistMan* histos) {
        histos->fill1DHist((Float_t)nsegm,"segments_per_chamber","","Number of segments per chamber","Entires",4,100,0.0,100.0,1.0,"Test");
      }
 
-     // Here make map of single (per chamber) segments 
+     // Here make map of single (per chamber) segments  // Earlier we use to make map of single(per chamber) segments, now we are collecting all possible segments
      // m_Single_cscSegments_recHitRecordX,*Y[key_chamber] from 
      // m_cscSegments_recHitRecordX,*Y using m_nsegments_chamber[key_chamber]=1
 
@@ -507,7 +507,7 @@ void AnalysisGasGain::GetTracks(HistMan* histos) {
         if(debug_new) std::cout<<" inside the loop for the muons "<<i<< " size "<<(*fmuons_cscSegmentRecord_nRecHits)[i].size()<<std::endl;
         // Going to all the segments in a muon
         if(i<10 && (*fmuons_cscSegmentRecord_nRecHits)[i].size() > 0  && 
-        (fmuons_Zcand[i] && fmuons_isomuondzdxy[i] )) { //Last part to make sure that muon is isolated and passes Zmumu selection
+        (fmuons_Zcand[i] && fmuons_isomuondzdxy[i] &&fmuons_TightId[i] )) { //Last part to make sure that muon is isolated and passes Zmumu selection
           passed_sel++;
           // i< 10 due to use in key for map
           histos->fill1DHist((Float_t)(*fmuons_cscSegmentRecord_nRecHits)[i].size(),
@@ -1038,6 +1038,8 @@ fmuons_cscSegmentRecord_localX    = 0;
   //if(debug_program)  std::cout<<"entering entry loop "<<std::endl;
     std::cout<<"entering entry loop "<<std::endl;
   int passed_Zevents = 0;
+  int passed_Zevents_one = 0;
+  int passed_Zevents_two = 0;
   int not_passed_Zevents = 0;
   int not_passed_Zevents_zero = 0;
   int not_passed_Zevents_multiple = 0;
@@ -1053,6 +1055,7 @@ fmuons_cscSegmentRecord_localX    = 0;
   int Nevents_not_trigger_matched = 0;
   int Nevents_not_trigger_matched_pTcut = 0;
   int Nevents_with_two_isolated_muons = 0;
+  int Nevents_with_two_tight_isolated_muons = 0;
 
   double pT_cut = 28;
 
@@ -1156,6 +1159,7 @@ for(Int_t ient=0;ient<nentries;ient++) {
     double isolation_value_one, isolation_value_two;
      for(int iM = 0; iM< fmuons_nMuons;iM++) {
 			 fmuons_Zcand[iM] = false; fmuons_isomuondzdxy[iM] = false;
+			 fmuons_TightId[iM] = false;
        fmuons_matched_trigger[iM] = false;
       }
      //To Skim: 2 muons pt 10, 70<M(mumu)<110
@@ -1211,15 +1215,35 @@ for(Int_t ient=0;ient<nentries;ient++) {
     // Need to build the Z candidate with the trigger matched muon and other muon of atleast 10 GeV and put selections on the Z candidate
 
     for( int iM = 0; iM<  fmuons_nMuons;iM++){
-       //double isolationValue = (fmuons_isoCH03[iM] + std::max (0.0, fmuons_isoNH03[iM] + fmuons_isoPhot03[iM] - 0.5*(fmuons_isoPU03[iM]) ) )/ fmuons_pt[iM]; 
        double isolationValue = (fmuons_isoCH04[iM] + std::max (0.0, fmuons_isoNH04[iM] + fmuons_isoPhot04[iM] - 0.5*(fmuons_isoPU04[iM]) ) )/ fmuons_pt[iM]; 
-       if(debug_new) std::cout<<" muon "<<iM<<" : "<<fmuons_pt[iM]<<" : "<<fmuons_eta[iM]<<" : "<<fmuons_phi[iM]<<" : "<<fmuons_dz[iM]<<" : "<<fmuons_dxy[iM]<<" : isolation : "<<isolationValue<<std::endl;
-       if(debug_new) std::cout<<" isGlobalmuon :"<<fmuons_isGlobalMuon[iM]<<" : isPFMuon "<<fmuons_isPFMuon[iM]<<" : isTrackerMuon "<<fmuons_isTrackerMuon[iM]<<" : globalTrackNormalizedChi2 "<<fmuons_globalTrackNormalizedChi2[iM]<<" : globalTrackNumberOfValidMuonHits "<<fmuons_globalTrackNumberOfValidMuonHits[iM]<<" : numberOfMatchedStations "<<fmuons_numberOfMatchedStations[iM]<<" : trackerValidPixelHits "<<fmuons_trackerValidPixelHits[iM]<<" : trackerLayers "<<fmuons_trackerLayers[iM]<<std::endl;
        histos->fill1DHist(isolationValue,"muon_isolation_before_selection","","isolation value of muon before any selection","Entries",4,100,0,1.50,1.0,"Test");
+       if(debug_new) std::cout<<" muon "<<iM<<" : isolation : "<<isolationValue<<std::endl;
+       if(fabs(isolationValue) >0.15) continue;
+       fmuons_isomuondzdxy[iM]=true;
+		}
+    int nIsolatedMuons = 0;
+    for(int iM = 0; iM < fmuons_nMuons; iM++) {
+      if(fmuons_isomuondzdxy[iM]) {
+        nIsolatedMuons++;
+      }
+    }
+
+		if(nIsolatedMuons>=2){
+      Nevents_with_two_isolated_muons++;
+		}
+		else{
+			continue;
+		}
+    // Fill histogram for number of isolated muons per event
+    histos->fill1DHist(nIsolatedMuons, "nIsolatedMuons_per_event", "", "Number of isolated muons per event", "Entries", 4, 10, 0.0, 10.0, 1.0, "Test");
+    if(debug_new) std::cout<<" number of isolated muons "<<nIsolatedMuons<<std::endl;
+
+    for( int iM = 0; iM<  fmuons_nMuons;iM++){
+		  if(!fmuons_isomuondzdxy[iM]) continue;	
+			if(debug_new) std::cout<<" isGlobalmuon :"<<fmuons_isGlobalMuon[iM]<<" : isPFMuon "<<fmuons_isPFMuon[iM]<<" : isTrackerMuon "<<fmuons_isTrackerMuon[iM]<<" : globalTrackNormalizedChi2 "<<fmuons_globalTrackNormalizedChi2[iM]<<" : globalTrackNumberOfValidMuonHits "<<fmuons_globalTrackNumberOfValidMuonHits[iM]<<" : numberOfMatchedStations "<<fmuons_numberOfMatchedStations[iM]<<" : trackerValidPixelHits "<<fmuons_trackerValidPixelHits[iM]<<" : trackerLayers "<<fmuons_trackerLayers[iM]<<std::endl;
        if( fmuons_pt[iM]<10) continue;
        if(fabs(fmuons_dz[iM]) >0.5) continue;
        if(fabs(fmuons_dxy[iM]) >0.2) continue;
-       if(fabs(isolationValue) >0.15) continue;
        // New conditions
        if(fmuons_isGlobalMuon[iM] ==false) continue;
        if(fmuons_isPFMuon[iM] ==false) continue;
@@ -1230,23 +1254,21 @@ for(Int_t ient=0;ient<nentries;ient++) {
     	 if(fmuons_numberOfMatchedStations[iM] <=1 ) continue;
        if(fmuons_trackerValidPixelHits[iM] <=0) continue;
        if(fmuons_trackerLayers[iM] <=5 ) continue;
-       fmuons_isomuondzdxy[iM]=true;
+       fmuons_TightId[iM]=true;
        if(debug_new) std::cout<<" muon "<<iM<<" passed all selections and iso bool "<<fmuons_isomuondzdxy[iM]<<std::endl;
     }
-    // TO check number of events where we have atleast two isolated muons, this is to check the efficiency of the cut 
-    int nIsolatedMuons = 0;
+    int nTightIsolatedMuons = 0;
     for(int iM = 0; iM < fmuons_nMuons; iM++) {
-      if(fmuons_isomuondzdxy[iM]) {
-        nIsolatedMuons++;
+      if(fmuons_TightId[iM] ) {
+        nTightIsolatedMuons++;
       }
     }
-    // Fill histogram for number of isolated muons per event
-    histos->fill1DHist(nIsolatedMuons, "nIsolatedMuons_per_event", "", "Number of isolated muons per event", "Entries", 4, 10, 0.0, 10.0, 1.0, "Test");
-    if(debug_new) std::cout<<" number of isolated muons "<<nIsolatedMuons<<std::endl;
+
+    // TO check number of events where we have atleast two isolated muons, this is to check the efficiency of the cut 
     // Count events with at least 2 isolated muons and only events with atleast 2 isolated muons are considered
     // ********************** Isolation check done ****************** 
-    if(nIsolatedMuons >= 2) {
-      Nevents_with_two_isolated_muons++;
+    if(nTightIsolatedMuons >= 2) {
+      Nevents_with_two_tight_isolated_muons++;
     }
     else{
       continue;
@@ -1258,7 +1280,7 @@ for(Int_t ient=0;ient<nentries;ient++) {
     if(debug_new) std::cout<<"pT matched "<<i<<" : "<<pT_matched[i]<<" : eta "<<eta_matched[i]<<" : phi "<<phi_matched[i]<<std::endl;
     }
     for( int iM = 0; iM<  fmuons_nMuons;iM++){
-      if(fmuons_isomuondzdxy[iM] ==false) continue;
+      if(fmuons_TightId[iM] ==false) continue;
       // Now check if the muon matches with trigger , the leading muon in the event
       TLorentzVector mu1; 
       mu1.SetPtEtaPhiM( fmuons_pt[iM], fmuons_eta[iM], fmuons_phi[iM],mass_mu);
@@ -1268,14 +1290,18 @@ for(Int_t ient=0;ient<nentries;ient++) {
         double deltaR1_value = mu1.DeltaR(matched_v);
         histos->fill1DHist(deltaR1_value,"deltaR_isolated_muon_trigger","","deltaR of isolated muon and trigger muon","Entries",4,100,0,5.0,1.0,"Test");
         if(debug_new) std::cout<<"deltaR1_value for muon "<<iM<<" : "<<deltaR1_value<<" : pT "<<fmuons_pt[iM]<<" : eta "<<fmuons_eta[iM]<<" : phi "<<fmuons_phi[iM]<<" : pT matched "<<pT_matched[i]<<" : eta matched "<<eta_matched[i]<<" : phi matched "<<phi_matched[i]<<std::endl;
-        if(deltaR1_value <0.3) {
-            histos->fill1DHist(deltaR1_value,"deltaR_isolated_muon_trigger_matched","","deltaR of isolated muon and trigger muon which matched","Entries",4,100,0,5.0,1.0,"Test");
+        histos->fill1DHist(deltaR1_value,"deltaR_isolated_muon_with_trigger","","deltaR of isolated muon and trigger muon (both muons)","Entries",4,500,0,5,1.0,"Test");
+        if(deltaR1_value <0.03) {
             if(debug_new) std::cout<<" yes matched "<<std::endl;
+             histos->fill1DHist(deltaR1_value,"deltaR_isolated_muon_trigger_matched","","deltaR of isolated muon and trigger muon which matched","Entries",4,60,0,0.3,1.0,"Test");
             if (fmuons_pt[iM] > pT_cut) {
+							double deltapT_value = (pT_matched[i] - fmuons_pt[iM])/fmuons_pt[iM];
+              histos->fill1DHist(deltapT_value,"deltapT_isolated_muon_trigger_matched","","|#Delta pT|/pT of isolated muon and trigger muon which matched","Entries",4,100,0,1.0,1.0,"Test");
+
               if(debug_new) std::cout<<" yes matched pT cut "<<std::endl;
               event_has_trigger_matched_muon = true;
               fmuons_matched_trigger[iM] = true;
-              histos->fill1DHist(deltaR1_value,"deltaR_isolated_muon_trigger_matched_pTcut","","deltaR of isolated muon and trigger muon which matched with pT>28 GeV","Entries",4,100,0,5.0,1.0,"Test");
+              histos->fill1DHist(deltaR1_value,"deltaR_isolated_muon_trigger_matched_pTcut","","deltaR of isolated muon and trigger muon which matched with pT>28 GeV","Entries",4,100,0,0.3,1.0,"Test");
             }
          }// delta R check done
        } // end of trigger matched loop
@@ -1317,8 +1343,10 @@ for(Int_t ient=0;ient<nentries;ient++) {
     // Now we build the Z candidate with the trigger matched muon and other muon of atleast 10 GeV and put selections on the Z candidate
      for(int iM=0 ; iM< fmuons_nMuons; iM++){
         if(fmuons_isomuondzdxy[iM] ==false) continue;
+        if(fmuons_TightId[iM] ==false) continue;
         for(int jM=iM+1; jM< fmuons_nMuons; jM++){
             if(fmuons_isomuondzdxy[jM] ==false) continue;
+            if(fmuons_TightId[jM] ==false) continue;
              if(fmuons_charge[iM] ==fmuons_charge[jM]) continue;
 
              if(debug_new) std::cout<<" checking muon pair "<<iM<<" : "<<jM<<" trigger matching "<<fmuons_matched_trigger[iM]<<" : "<<fmuons_matched_trigger[jM]<<std::endl;
@@ -1366,7 +1394,11 @@ for(Int_t ient=0;ient<nentries;ient++) {
 
       // Important
       // To check the efficiency of the cut of 10 GeV on mass window and know which events to keep
-      if (nZcandidates_narrow == 1 || nZcandidates_narrow == 2) passed_Zevents++;
+      if (nZcandidates_narrow == 1 || nZcandidates_narrow == 2) {
+				 if(nZcandidates_narrow==1) passed_Zevents_one++;
+				 else if(nZcandidates_narrow==2) passed_Zevents_two++;
+				passed_Zevents++;
+			}
       else { 
         if(nZcandidates_narrow==0) not_passed_Zevents_zero++; 
         else not_passed_Zevents_multiple++;  
@@ -1394,17 +1426,20 @@ for(Int_t ient=0;ient<nentries;ient++) {
        // Check if both muons pass the isolation and dxy cuts  : redundant sanity check
 			 if(fmuons_isomuondzdxy[first_index] ==false) continue;
 			 if(fmuons_isomuondzdxy[second_index] ==false) continue;
+			 if(fmuons_TightId[first_index] ==false) continue;
+			 if(fmuons_TightId[second_index] ==false) continue;
+
        fmuons_Zcand[first_index]=true; 
        fmuons_Zcand[second_index]=true; 
 
       for(int tM=0; tM< fmuons_nMuons;tM++){
-          if(fmuons_Zcand[tM]==true && fmuons_isomuondzdxy[tM]==true)  
+          if(fmuons_Zcand[tM]==true && fmuons_isomuondzdxy[tM]==true && fmuons_TightId[tM]==true)  
            histos->fill1DHist(fmuons_pt[tM],"muon_pT_events_from_Z","","muon pT for those muons which passes Z selection ","Entries",4,100,0,200,1.0,"Test");
       }// end of for loop iterating over all muons to fill muon pT andz_mass
 
     histos->fill1DHist(z_mass,"Zmass","","mass : Z","Entries/(0.4GeV)",4,100,70,110.0,1.0,"Test");
     histos->fill1DHist(z_pt,"Zpt","","pT : Z","Entries",4,100,0,200.0,1.0,"Test");
-    histos->fill1DHist(z_phi,"Zphi","","#phi : Z","Entries",4,100,-pi,pi,1.0,"Test");
+    histos->fill1DHist(z_phi,"Zphi","","#phi : Z","Entries",4,50,-pi,pi,1.0,"Test");
     histos->fill1DHist(z_eta,"Zeta","","#eta : Z","Entries",4,100,-2.5,2.5,1.0,"Test");
 
     if(runnb_previous_event != fRun ||   lumis_previous_event !=  fLumiSect)   _instlumi =instlumi(fRun, fLumiSect, year) ;
@@ -1547,11 +1582,14 @@ for(Int_t ient=0;ient<nentries;ient++) {
 
   std::cout<<" total number of events "<<nentries<<std::endl;
   std::cout<<" total  isolated events "<<Nevents_with_two_isolated_muons<<std::endl;
+  std::cout<<" total  isolated events "<<Nevents_with_two_tight_isolated_muons<<std::endl;
   std::cout<<" total trigger matched events "<<Nevents_trigger_matched<<std::endl;
   std::cout<<" total not trigger matched events "<<Nevents_not_trigger_matched<<std::endl;
   std::cout<<" total not trigger matched events by pT cut "<<Nevents_not_trigger_matched_pTcut<<std::endl;
 
 	std::cout<<" total Z events  "<<passed_Zevents<<std::endl;
+	std::cout<<" total Z events  with 1 candidate"<<passed_Zevents_one<<std::endl;
+	std::cout<<" total Z events  with 2 candidate"<<passed_Zevents_two<<std::endl;
 	std::cout<<" total not Z events  "<<not_passed_Zevents<<std::endl;
 	std::cout<<" total not Z events with zero Z candidates  "<<not_passed_Zevents_zero<<std::endl;
 	std::cout<<" total not Z events with multiple Z candidates  "<<not_passed_Zevents_multiple<<std::endl;
