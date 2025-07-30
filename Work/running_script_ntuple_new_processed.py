@@ -9,15 +9,17 @@ parser.add_argument('--dataset_name', type=str, required=True, help='The name of
 parser.add_argument('--year', type=str, required=True, help='Year of the dataset, e.g., "2016B"')
 parser.add_argument('--input_path', type=str, required=True, help='The path to the input file, e.g. "/path/to/file"')
 parser.add_argument('--output_path', type=str, required=True, help='Output file path ')
+parser.add_argument('--number', type=str, required=True, help='The number of the dataset, e.g., "first"')
 args = parser.parse_args()
 
 dataset_name = args.dataset_name
 input_path = args.input_path
 output_path = args.output_path
 year = args.year
+number  = args.number
 
 # Log files for processed files and errors
-processed_files_log = f"processed_files_{year}{dataset_name}.log"
+processed_files_log = f"processed_files_{year}{dataset_name}_{number}.log"
 log_file = open(f"log_{year}.txt", "a")
 print(" started this program")
 # Load previously processed files into a set for quick lookup

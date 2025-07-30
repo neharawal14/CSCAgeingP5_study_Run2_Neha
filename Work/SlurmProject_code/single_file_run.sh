@@ -2,9 +2,10 @@
 input_file=$1
 output_file=$2
 year=$3
-
-log_file="logs/${year}/$(basename ${input_file}).log"
-failed_filelist="logs/failed_filelist_${year}.txt"
+dataset=$4
+mkdir -p  "logs/${year}/${year}${dataset}"
+log_file="logs/${year}/${year}${dataset}/$(basename ${input_file}).log"
+failed_filelist="logs/failed_filelist_${year}${dataset}.txt"
 
 echo "=== System Info (uname -a) ==="
 uname -a
@@ -29,6 +30,17 @@ ldd  /cmsuf/data/store/user/t2/users/neha.rawal/CSCAgeing_Run2_study/CMSSW_13_3_
 ##    exit 1
 ##fi
 
+# print whether cvmfs mount or not. because the jobs are failing
+echo "cvmfs mount check"
+ls "/cvmfs/"
+echo "cvmfs cms mount check"
+ls "/cvmfs/cms.cern.ch/"
+echo "cvmfs cms mount -el8  check"
+ls "/cvmfs/cms.cern.ch/el8_amd64_gcc12/"
+echo "cvmfs cms mount -el8 lcg  check"
+ls "/cvmfs/cms.cern.ch/el8_amd64_gcc12/lcg/"
+echo "cvmfs cms mount -el8 lcg root  check"
+ls "/cvmfs/cms.cern.ch/el8_amd64_gcc12/lcg/root/"
 # Run your actual analysis
 /cmsuf/data/store/user/t2/users/neha.rawal/CSCAgeing_Run2_study/CMSSW_13_3_0/src/CSCAgeingP5_study_Run2_Neha/Src/build/Analysis_exe "$input_file" "$output_file" "$year" >> $log_file 2>&1
 #../../Src/build/Analysis_exe "$input_file" "$output_file" "$year" >> $log_file 2>&1

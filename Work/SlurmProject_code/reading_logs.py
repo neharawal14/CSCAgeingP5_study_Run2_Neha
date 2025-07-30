@@ -1,17 +1,19 @@
 import os
 import glob
 
-year= "2016"
+year= "2017"
 #dataset_list = ["B","C","D","E","F_1"]
-dataset_list = ["A"]
+dataset_list = ["D"]
 for dataset in dataset_list:
-        log_dir = f"logs/2016/"
+        log_dir = f"logs/{year}/{year}{dataset}/"
         #print("log dir ", log_dir)
         error_logs = []
         incomplete_logs = []
         success_logs = []
+        number=0
         for log_file in glob.glob(os.path.join(log_dir, "*.log")):
-            #print("processeing log  files:")
+            print("processeing log  files:")
+            number=number+1
             with open(log_file, "r") as f:
                 content = f.read()
                 if "ERROR" in content:
@@ -25,6 +27,7 @@ for dataset in dataset_list:
         for log in error_logs:
             print("  -", log)
         print("⚠️ Logs with NO 'Success' line (possibly crashed):", len(incomplete_logs))
+        print(" logs processed ",number)
         for log in incomplete_logs:
             print("  -", log)
         # Optional: write lists to files

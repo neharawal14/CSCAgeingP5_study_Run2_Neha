@@ -287,6 +287,7 @@ Int_t  AnalysisGasGain::doHVsegment(Float_t yloc,Int_t stn,Int_t rng,Int_t layer
 
 void AnalysisGasGain::Analyze(HistMan *histos) {
 
+	if(debug_bool) std::cout<<"in analyze"<<std::endl;
   CycleTree(histos);
 	if(debug_bool) std::cout<<"eror in clearing hist maps"<<std::endl;
   histos->ClearHistMaps();
@@ -927,6 +928,7 @@ void AnalysisGasGain::CycleTree(HistMan* histos) {
   b_timeSecond->SetAddress(&ftimeSecond);
 //  b_vertex_nVertex->SetAddress(&fvertex_nVertex);
   
+	if(debug_bool) std::cout<<"did setup basic branches :1 "<<std::endl;
   b_recHits2D_nRecHits2D->SetAddress(&frecHits2D_nRecHits2D);
   b_recHits2D_ID_endcap->SetAddress(frecHits2D_ID_endcap); // no & for array
   b_recHits2D_ID_station->SetAddress(frecHits2D_ID_station);
@@ -939,6 +941,7 @@ void AnalysisGasGain::CycleTree(HistMan* histos) {
   b_recHits2D_localY->SetAddress(frecHits2D_localY);
   b_recHits2D_SumQ->SetAddress(frecHits2D_SumQ); 
 
+	if(debug_bool) std::cout<<"did setup basic branches :2 "<<std::endl;
 //  b_cscSegments_recHitRecord_endcap->SetAddress(fcscSegments_recHitRecord_endcap);
 //  b_cscSegments_recHitRecord_station->SetAddress(fcscSegments_recHitRecord_station);
 //  b_cscSegments_recHitRecord_ring->SetAddress(fcscSegments_recHitRecord_ring);
@@ -963,6 +966,7 @@ void AnalysisGasGain::CycleTree(HistMan* histos) {
   b_cscSegments_recHitRecord_localX->SetAddress(&fcscSegments_recHitRecord_localX);
   b_cscSegments_recHitRecord_localY->SetAddress(&fcscSegments_recHitRecord_localY);
 
+	if(debug_bool) std::cout<<"did setup basic branches :3 "<<std::endl;
   b_muons_cscSegmentRecord_nRecHits->SetAddress(&fmuons_cscSegmentRecord_nRecHits);
   b_muons_cscSegmentRecord_endcap->SetAddress(&fmuons_cscSegmentRecord_endcap);
   b_muons_cscSegmentRecord_station->SetAddress(&fmuons_cscSegmentRecord_station);
@@ -971,13 +975,17 @@ void AnalysisGasGain::CycleTree(HistMan* histos) {
   b_muons_cscSegmentRecord_localX->SetAddress(&fmuons_cscSegmentRecord_localX);
   b_muons_cscSegmentRecord_localY->SetAddress(&fmuons_cscSegmentRecord_localY);
 
+	if(debug_bool) std::cout<<"did setup basic branches :4 "<<std::endl;
   b_muons_nMuons->SetAddress(&fmuons_nMuons);
  
+	if(debug_bool) std::cout<<"did setup basic branches :4 second "<<std::endl;
  	b_nb_trigger_matched->SetAddress(&nb_trigger_matched);
+	if(debug_bool) std::cout<<"did setup basic branches :5 "<<std::endl;
  	b_pT_matched->SetAddress(&pT_matched);
   b_eta_matched->SetAddress(&eta_matched);
   b_phi_matched->SetAddress(&phi_matched);
   b_Id_matched->SetAddress(&Id_matched);
+	if(debug_bool) std::cout<<"did setup basic branches :6 "<<std::endl;
 
 	b_muons_charge->SetAddress(fmuons_charge);
   b_muons_pt->SetAddress(fmuons_pt);
@@ -990,6 +998,7 @@ void AnalysisGasGain::CycleTree(HistMan* histos) {
   b_muons_isoPU03->SetAddress(fmuons_isoPU03);
   b_muons_isoPhot03->SetAddress(fmuons_isoPhot03);
 
+	if(debug_bool) std::cout<<"did setup basic branches :7 "<<std::endl;
   b_muons_isoCH04->SetAddress(fmuons_isoCH04);
   b_muons_isoNH04->SetAddress(fmuons_isoNH04);
   b_muons_isoPU04->SetAddress(fmuons_isoPU04);

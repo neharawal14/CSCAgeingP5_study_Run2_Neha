@@ -8,11 +8,10 @@ set(CMAKE_PREFIX_PATH $ENV{ROOTSYS})
 
 # Find ROOT using modern CONFIG mode
 find_package(ROOT REQUIRED CONFIG)
-
 # Generate ROOT dictionary
 root_generate_dictionary(G__Analysis
-	AnalysisGasGain.h
 	#old_AnalysisGasGain.h
+	AnalysisGasGain.h
   HistMan.h
   ChargeORIGandInstL.h
   me11.h
@@ -35,8 +34,8 @@ add_library(Analysis SHARED
 
 # Link ROOT libraries
 target_link_libraries(Analysis PUBLIC ROOT::Core ROOT::Physics ROOT::RooFit)
-
 # Include current directory for headers
+#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_include_directories(Analysis PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 
 # Build main executable
