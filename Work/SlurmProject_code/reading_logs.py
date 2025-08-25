@@ -3,7 +3,7 @@ import glob
 
 year= "2017"
 #dataset_list = ["B","C","D","E","F_1"]
-dataset_list = ["D"]
+dataset_list = ["C"]
 for dataset in dataset_list:
         log_dir = f"logs/{year}/{year}{dataset}/"
         #print("log dir ", log_dir)
