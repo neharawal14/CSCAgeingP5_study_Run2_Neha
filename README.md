@@ -1,21 +1,21 @@
 # CSC ageing studies on P5 data - Run2 with new selections
 
 ## Setup
-This code is for CMSSW_13_3_0
-```source /cvmfs/cms.cern.ch/cmsset_default.sh cmsrel CMSSW_13_3_0 
-cd CMSSW_13_3_0/src 
+This code is for CMSSW_15_0_4
+```source /cvmfs/cms.cern.ch/cmsset_default.sh cmsrel CMSSW_15_0_4 
+cd CMSSW_15_0_4/src 
 cmsenv
 ```
 
 ## Checkout the branch  Dev_Run2_code
 ```
 git remote add origin  git@github.com:neharawal14/CSCAgeingP5_study_Run2_Neha.git 
-git fetch origin Dev_Run2_code
-git checkout Dev_Run2_code
+git fetch origin Run2_NewSelection_updates
+git checkout Run2_NewSelection_updates
 ```
 or checkout in this manner
 ```
-git clone --branch Dev_Run2_code --single-branch git@github.com:neharawal14/CSCAgeingP5_study_Run2_Neha.git 
+git clone --branch Run2_NewSelection_updates --single-branch git@github.com:neharawal14/CSCAgeingP5_study_Run2_Neha.git 
 ```
 
 ## Code structure
