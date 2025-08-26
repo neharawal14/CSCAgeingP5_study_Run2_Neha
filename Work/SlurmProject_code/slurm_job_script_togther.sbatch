@@ -6,7 +6,7 @@
 #SBATCH --mem=700MB
 #SBATCH --qos=avery
 #SBATCH --cpus-per-task=1
-#SBATCH --constraint=el8
+#SBATCH --constraint=el9
 # Get line N from filelist.txt where N = SLURM_ARRAY_TASK_ID
 # Default filelist if not passed
 #: "${FILELIST:=filelist_2016C.txt}"

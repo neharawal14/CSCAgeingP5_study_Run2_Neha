@@ -12,7 +12,7 @@ uname -a
 echo ""
 echo "=== Running executable ==="
 # Replace the path with your actual executable path
-ldd  /cmsuf/data/store/user/t2/users/neha.rawal/CSCAgeing_Run2_study/CMSSW_13_3_0/src/CSCAgeingP5_study_Run2_Neha/Src/build/Analysis_exe
+ldd /cmsuf/data/store/user/t2/users/neha.rawal/CSCAgeing_Run2_study/New_environment/CMSSW_15_0_4/src/Src/build/Analysis_exe
 # Define the path to your actual processing script (this same file, or another)
 ##source /cvmfs/cms.cern.ch/cmsset_default.sh
 ##cd /cmsuf/data/store/user/t2/users/neha.rawal/CSCAgeing_Run2_study/again_env/CMSSW_13_3_0/src/
@@ -30,19 +30,8 @@ ldd  /cmsuf/data/store/user/t2/users/neha.rawal/CSCAgeing_Run2_study/CMSSW_13_3_
 ##    exit 1
 ##fi
 
-# print whether cvmfs mount or not. because the jobs are failing
-echo "cvmfs mount check"
-ls "/cvmfs/"
-echo "cvmfs cms mount check"
-ls "/cvmfs/cms.cern.ch/"
-echo "cvmfs cms mount -el8  check"
-ls "/cvmfs/cms.cern.ch/el8_amd64_gcc12/"
-echo "cvmfs cms mount -el8 lcg  check"
-ls "/cvmfs/cms.cern.ch/el8_amd64_gcc12/lcg/"
-echo "cvmfs cms mount -el8 lcg root  check"
-ls "/cvmfs/cms.cern.ch/el8_amd64_gcc12/lcg/root/"
 # Run your actual analysis
-/cmsuf/data/store/user/t2/users/neha.rawal/CSCAgeing_Run2_study/CMSSW_13_3_0/src/CSCAgeingP5_study_Run2_Neha/Src/build/Analysis_exe "$input_file" "$output_file" "$year" >> $log_file 2>&1
+/cmsuf/data/store/user/t2/users/neha.rawal/CSCAgeing_Run2_study/New_environment/CMSSW_15_0_4/src/Src/build/Analysis_exe "$input_file" "$output_file" "$year" >> $log_file 2>&1
 #../../Src/build/Analysis_exe "$input_file" "$output_file" "$year" >> $log_file 2>&1
 if [ $? -ne 0 ]; then
 	    echo "ERROR: Analysis failed for $input_file" >> $log_file

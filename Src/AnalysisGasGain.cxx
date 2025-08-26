@@ -369,7 +369,7 @@ void AnalysisGasGain::GetSegments(HistMan* histos) {
              Double_t localY=(*fcscSegments_recHitRecord_localY)[i][j];
 
              UInt_t key_segment=1000000*endcap+100000*station+10000*ring+100*chamber+i;
-             std::cout<<" segments "<<fcscSegments_recHitRecord_endcap->size()<<" J : "<<j<<" local X "<<localX<< " local Y : "<<localY<<" chamber "<<(key_segment/100)<<std::endl;
+             //std::cout<<" segments "<<fcscSegments_recHitRecord_endcap->size()<<" J : "<<j<<" local X "<<localX<< " local Y : "<<localY<<" chamber "<<(key_segment/100)<<std::endl;
              if(debug_bool)std::cout<<" key segment from segment "<<key_segment<<" layer "<<layer<<std::endl;
 	           if(j==0) {
                nhits_segm_event=nhits_segm_event+(Int_t)(*fcscSegments_recHitRecord_endcap)[i].size();
@@ -424,14 +424,13 @@ void AnalysisGasGain::GetSegments(HistMan* histos) {
           //std::cout<<m_nsegments_chamber[key_chmb]<<std::endl;
           if(m_nsegments_chamber[key_chmb]==1){
 	        UInt_t key_segment=1000000*endcap+100000*station+10000*ring+100*chamber+i;  
-           std::cout<<" here "<<std::endl;
 	         if(m_Single_cscSegments_recHitRecordX.find(key_chmb) == m_Single_cscSegments_recHitRecordX.end()) { 
              if(m_cscSegments_recHitRecordX.find(key_segment)== m_cscSegments_recHitRecordX.end()) 
              cout<<"Error: no m_cscSegments_recHitRecordX with key_segment="<<key_segment<<endl;
              if(m_cscSegments_recHitRecordX.find(key_segment)!= m_cscSegments_recHitRecordX.end()){
 		          m_Single_cscSegments_recHitRecordX[key_chmb]=m_cscSegments_recHitRecordX[key_segment];
 		          m_Single_cscSegments_recHitRecordY[key_chmb]=m_cscSegments_recHitRecordY[key_segment];
-              std::cout<<" considered one X : "<<m_Single_cscSegments_recHitRecordX[key_chmb][0]<<" Y "<<m_Single_cscSegments_recHitRecordY[key_chmb][0]<<" chamber "<<key_chmb<<" segment "<<key_segment<<std::endl;
+              //std::cout<<" considered one X : "<<m_Single_cscSegments_recHitRecordX[key_chmb][0]<<" Y "<<m_Single_cscSegments_recHitRecordY[key_chmb][0]<<" chamber "<<key_chmb<<" segment "<<key_segment<<std::endl;
               if(debug_bool)   std::cout<<" the single csc segment with value : key chamber : "<<key_chmb<<" segment "<<key_segment<<std::endl; 
 	           }  // end of if(m_cscSegments_recHitRecordX.find(key_segment)
 	         }   // end of if(m_Single_cscSegments_recHitRecordX.find(key_chmb)
@@ -597,7 +596,7 @@ void AnalysisGasGain::GetRecHitsSumQ(HistMan* histos) {
             Double_t xloc=frecHits2D_localX[irechit];
             Double_t yloc=frecHits2D_localY[irechit];
             Double_t sumq=frecHits2D_SumQ[irechit];
-            std::cout<<" x and y "<<xloc<<" : "<<yloc<<std::endl;
+            //std::cout<<" x and y "<<xloc<<" : "<<yloc<<std::endl;
             if(m_cscSegments_single_trk_recHitRecord.find(key_layer)!=m_cscSegments_single_trk_recHitRecord.end()) {
 
               Double_t dx=xloc-m_cscSegments_single_trk_recHitRecord[key_layer][0];
@@ -609,7 +608,7 @@ void AnalysisGasGain::GetRecHitsSumQ(HistMan* histos) {
               rechit_count[key_layer]++;
 
               if(fabs(dx) < 0.0001 && fabs(dy) < 0.0001){
-               std::cout<<" matching x and y "<<m_cscSegments_single_trk_recHitRecord[key_layer][0]<<" : "<<m_cscSegments_single_trk_recHitRecord[key_layer][1]<<" chamber "<<key_layer<<std::endl;
+               //std::cout<<" matching x and y "<<m_cscSegments_single_trk_recHitRecord[key_layer][0]<<" : "<<m_cscSegments_single_trk_recHitRecord[key_layer][1]<<" chamber "<<key_layer<<std::endl;
                if(debug_bool) std::cout<<"charge for key layer "<<key_layer<<" charge "<<sumq<<" event "<<_eventNb<<" chamber "<<chamber<<" nearest Strip "<<nStrip<<std::endl;
                if(debug_bool) std::cout<<"endcap "<<endcap<<" station "<<station<<" chamber "<<chamber<<" layer "<<layer<<" Event "<<fEvent<<" hit "<<irechit<<std::endl;
                 temp_sumq[key_layer] = sumq; // sum of charges per key layer
@@ -648,7 +647,7 @@ void AnalysisGasGain::GetRecHitsSumQ(HistMan* histos) {
               //    std::cout<<"only one rechit per key layer "<<key_layer<<"  "<<fEvent<<" sum "<<temp_sumq[key_layer]<<std::endl;
                 m_cscSegments_single_trk_recHitRecord[key_layer][2] = temp_sumq[key_layer];
            } else {
-                std::cout << "Multiple rechits for key layer: " << key_layer << ". sumQ not stored." <<std::endl;
+                if(debug_bool) std::cout << "Multiple rechits for key layer: " << key_layer << ". sumQ not stored." <<std::endl;
            }
         }
         for(map<Int_t, std::vector <Double_t> >::iterator It=m_cscSegments_single_trk_recHitRecord.begin(); 
