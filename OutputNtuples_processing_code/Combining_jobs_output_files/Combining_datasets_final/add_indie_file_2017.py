@@ -1,0 +1,7 @@
+import os
+import subprocess
+chamber_list =  ["ME11a", "ME11b", "ME12HV1", "ME12HV2","ME12HV3", "ME13HV1","ME13HV2","ME13HV3","ME21HV1","ME21HV2", "ME21HV3", "ME22HV1", "ME22HV2", "ME22HV3", "ME22HV4","ME22HV5","ME31HV1","ME31HV2", "ME31HV3", "ME32HV1", "ME32HV2", "ME32HV3", "ME32HV4","ME32HV5","ME41HV1","ME41HV2", "ME41HV3", "ME42HV1", "ME42HV2", "ME42HV3", "ME42HV4","ME42HV5"]
+for chamber in chamber_list:
+    subprocess.call(f"hadd 2017_all/csc_output_2017_{chamber}_tree.root 2017/2017B_1/csc_output_2017B_1_{chamber}_tree.root 2017/2017B_2/csc_output_2017B_2_{chamber}_tree.root 2017/2017C_1/csc_output_2017C_1_{chamber}_tree.root 2017/2017C_2/csc_output_2017C_2_{chamber}_tree.root 2017/2017D_1/csc_output_2017D_1_{chamber}_tree.root 2017/2017D_2/csc_output_2017D_2_{chamber}_tree.root 2017/2017E_3/csc_output_2017E_3_{chamber}_tree.root 2017/2017E_1/csc_output_2017E_1_{chamber}_tree.root 2017/2017E_2/csc_output_2017E_2_{chamber}_tree.root 2017/2017F_1/csc_output_2017F_1_{chamber}_tree.root 2017/2017F_2/csc_output_2017F_2_{chamber}_tree.root",shell=True)
+
+#subprocess.call(f"hadd 2017_all/csc_output_2017_tree.root 2017/2017B/csc_output_2017B_tree.root 2017/2017C/csc_output_2017C_tree.root 2017/2017D/csc_output_2017D_tree.root 2017/2017E/csc_output_2017E_tree.root 2017/2017F_1/csc_output_2017F_1_tree.root 2017/2017F_2/csc_output_2017F_2_tree.root 2017/2017G/csc_output_2017G_tree.root 2017/2017H/csc_output_2017H_tree.root",shell=True)
