@@ -46,3 +46,6 @@ Update prefix path  :
 export CMAKE_PREFIX_PATH=MY_ROOT_PATH:$CMAKE_PREFIX_PATH
 ```
 
+## Combination of the final ntuples
+Once you have saved your individual root files for each dataset, you can combine the outputs using code in 
+"OutputNtuples_processing_code/"
