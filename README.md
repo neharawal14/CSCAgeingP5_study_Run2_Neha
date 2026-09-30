@@ -49,3 +49,16 @@ export CMAKE_PREFIX_PATH=MY_ROOT_PATH:$CMAKE_PREFIX_PATH
 ## Combination of the final ntuples
 Once you have saved your individual root files for each dataset, you can combine the outputs using code in 
 "OutputNtuples_processing_code/"
+
+
+## Things that can be updated in current code:
+In Src/AnalysisGasGain.cxx:
+  1. When filling the integrated lumi information, fill more branches like _intlumi_delivered_dcsjson, _intlumi_recorded_dcjson, _intlumi_delivered_goldenjson, _intlumi_recorded_goldenjson; 
+  also: _instlumi_dcjson, _instlumi_goldenjson
+  2. update code Src/AnalysisGasGain.cxx along lines L1435 to L1445 to not be hardcode 
+  3. Can implement _HV by reading HV from dcs database
+  4. Also you can implement removing the HV trips by reading HV information from dcs, and remove events here 
+
+Currently all of these are done in separate code. 
+
+containing integratedlumi information for dcsjson; and 
