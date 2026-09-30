@@ -42,7 +42,9 @@ bool debug_bool = false;
 bool debug_bool_region = false;
 bool debug_program = false;
 // Important note : Endcap =1 => Plus Endcap , Endcap =2 => Minus Endcap
-AnalysisGasGain::AnalysisGasGain() { }
+AnalysisGasGain::AnalysisGasGain() { 
+
+}
 
 AnalysisGasGain::~AnalysisGasGain() { }
 
@@ -126,6 +128,7 @@ void AnalysisGasGain::Setup(Int_t fstat,Int_t fprint,string inp,string out, stri
  }
   // end of Y loc HV segment boundaries calculations
 	if(debug_bool) std::cout<<"Setup before  "<<std::endl;
+
 } // End of Setup function
 
 void AnalysisGasGain::SetupTree(){
@@ -407,6 +410,7 @@ void AnalysisGasGain::GetSegments(HistMan* histos) {
      if(m_nsegments_chamber.size() > 0) {
      for(UInt_t i=0;i<fcscSegments_recHitRecord_endcap->size(); i++) {
        if((Int_t)(*fcscSegments_recHitRecord_endcap)[i].size() >= minhitpersegment){ 
+
         Int_t endcap=(Int_t)(*fcscSegments_recHitRecord_endcap)[i][0];
         Int_t station=(Int_t)(*fcscSegments_recHitRecord_station)[i][0];
         Int_t ring=(Int_t)(*fcscSegments_recHitRecord_ring)[i][0];
@@ -430,7 +434,7 @@ void AnalysisGasGain::GetSegments(HistMan* histos) {
              if(m_cscSegments_recHitRecordX.find(key_segment)!= m_cscSegments_recHitRecordX.end()){
 		          m_Single_cscSegments_recHitRecordX[key_chmb]=m_cscSegments_recHitRecordX[key_segment];
 		          m_Single_cscSegments_recHitRecordY[key_chmb]=m_cscSegments_recHitRecordY[key_segment];
-              //std::cout<<" considered one X : "<<m_Single_cscSegments_recHitRecordX[key_chmb][0]<<" Y "<<m_Single_cscSegments_recHitRecordY[key_chmb][0]<<" chamber "<<key_chmb<<" segment "<<key_segment<<std::endl;
+              //std::cout<<" segment number "<<i<<" chamber "<<key_chmb<<" considered one X : "<<m_Single_cscSegments_recHitRecordX[key_chmb][0]<<" Y "<<m_Single_cscSegments_recHitRecordY[key_chmb][0]<<" chamber "<<key_chmb<<" segment "<<key_segment<<std::endl;
               if(debug_bool)   std::cout<<" the single csc segment with value : key chamber : "<<key_chmb<<" segment "<<key_segment<<std::endl; 
 	           }  // end of if(m_cscSegments_recHitRecordX.find(key_segment)
 	         }   // end of if(m_Single_cscSegments_recHitRecordX.find(key_chmb)
@@ -512,6 +516,7 @@ void AnalysisGasGain::GetTracks(HistMan* histos) {
               Int_t key_chmb=(Int_t)(key_trksegm/100);
               if(debug_bool) std::cout<<" segement number and key chamber "<<j<<" : "<<key_chmb<<std::endl;
 
+              //std::cout<<"segment nubmer for track "<<j<<" chamber "<<key_chmb<<" segment key "<<key_segment<<" position from muon track : "<<localX<<" y "<<localY<<std::endl;
               // to make sure there is a segment in the chamber
         	    if(m_nsegments_chamber.find(key_chmb) != m_nsegments_chamber.end())
               // The condition is to check number of segments in the chamber,and there should be just 1 segment in the chamber. This avoid complications arising from multiple segments in a chamber
@@ -535,7 +540,6 @@ void AnalysisGasGain::GetTracks(HistMan* histos) {
                      if( m_Single_cscSegments_recHitRecordX.find(key_chmb)!= m_Single_cscSegments_recHitRecordX.end()){
                       if( m_Single_cscSegments_recHitRecordY.find(key_chmb)!= m_Single_cscSegments_recHitRecordY.end()){
                         if( m_Single_cscSegments_recHitRecordX[key_chmb][k] > -999.0 && m_Single_cscSegments_recHitRecordY[key_chmb][k] > -999.0 ){
-                          if(debug_bool) std::cout<<"J value "<<j<<" position X : "<<m_Single_cscSegments_recHitRecordX[key_chmb][k]<<" position from muon "<<localX<<std::endl;
                           m_cscSegments_single_trk_recHitRecord[key_layer][0]=m_Single_cscSegments_recHitRecordX[key_chmb][k];
                           m_cscSegments_single_trk_recHitRecord[key_layer][1]=m_Single_cscSegments_recHitRecordY[key_chmb][k];
                         }
@@ -596,7 +600,8 @@ void AnalysisGasGain::GetRecHitsSumQ(HistMan* histos) {
             Double_t xloc=frecHits2D_localX[irechit];
             Double_t yloc=frecHits2D_localY[irechit];
             Double_t sumq=frecHits2D_SumQ[irechit];
-            //std::cout<<" x and y "<<xloc<<" : "<<yloc<<std::endl;
+						
+           // std::cout<<" testing  x and y "<<xloc<<" : "<<yloc<<std::endl;
             if(m_cscSegments_single_trk_recHitRecord.find(key_layer)!=m_cscSegments_single_trk_recHitRecord.end()) {
 
               Double_t dx=xloc-m_cscSegments_single_trk_recHitRecord[key_layer][0];
@@ -607,11 +612,13 @@ void AnalysisGasGain::GetRecHitsSumQ(HistMan* histos) {
               rechit_counts[iregion][key_layer]++;
               rechit_count[key_layer]++;
 
+              // std::cout<<" checking  x and y "<<xloc<<" : "<<yloc<<" compared one "<<m_cscSegments_single_trk_recHitRecord[key_layer][0]<<" : "<<m_cscSegments_single_trk_recHitRecord[key_layer][1]<<std::endl;
               if(fabs(dx) < 0.0001 && fabs(dy) < 0.0001){
-               //std::cout<<" matching x and y "<<m_cscSegments_single_trk_recHitRecord[key_layer][0]<<" : "<<m_cscSegments_single_trk_recHitRecord[key_layer][1]<<" chamber "<<key_layer<<std::endl;
+               std::cout<<" matching x and y "<<m_cscSegments_single_trk_recHitRecord[key_layer][0]<<" : "<<m_cscSegments_single_trk_recHitRecord[key_layer][1]<<" chamber "<<key_layer<<std::endl;
                if(debug_bool) std::cout<<"charge for key layer "<<key_layer<<" charge "<<sumq<<" event "<<_eventNb<<" chamber "<<chamber<<" nearest Strip "<<nStrip<<std::endl;
                if(debug_bool) std::cout<<"endcap "<<endcap<<" station "<<station<<" chamber "<<chamber<<" layer "<<layer<<" Event "<<fEvent<<" hit "<<irechit<<std::endl;
-                temp_sumq[key_layer] = sumq; // sum of charges per key layer
+							 // Storing the x and y poistion for each hit, to check if the number of hit in a layer are more than 1 , do x and y differs
+	              temp_sumq[key_layer] = sumq; // sum of charges per key layer
 								temp_nStrip[key_layer] = nStrip;
 								temp_nWire[key_layer] = nWire;
               } // end of if(fabs(dx) < 0.0001 && fabs(dy) < 0.0001)
@@ -623,9 +630,12 @@ void AnalysisGasGain::GetRecHitsSumQ(HistMan* histos) {
 	  } // end of  if((frecHits2D_SumQ[irechit] > 0.0)
   } // end of  for(Int_t irechit=0;irechit<frecHits2D_nRecHits2D;
 // filling the number of hits in each layer of each hv segment
+
       for (const auto& entry : rechit_counts) {
+
             Int_t region = entry.first;
             std::map<Int_t, int> layer_count = entry.second;
+
             for(const auto & layer_entry : layer_count){
               TString chamber_type = GetRegionName(region);
               Int_t key_layer = layer_entry.first;
@@ -638,15 +648,15 @@ void AnalysisGasGain::GetRecHitsSumQ(HistMan* histos) {
         }
       for (const auto& entry : rechit_count) {
         
-            Int_t key_layer = entry.first;
-            int count = entry.second;
-            
+  			    Int_t key_layer = entry.first;
+            int count = entry.second;	
             histos->fill1DHist(count,"number_hits_per_layer","","Number of rechits per layer","Entries",4,10,0.0,10.0,1.0,"Test");    //laurent: I commented this line:
             // Only store sumq if there is exactly one rechit for this key layer
             if (count == 1) {
-              //    std::cout<<"only one rechit per key layer "<<key_layer<<"  "<<fEvent<<" sum "<<temp_sumq[key_layer]<<std::endl;
-                m_cscSegments_single_trk_recHitRecord[key_layer][2] = temp_sumq[key_layer];
+            //    std::cout<<"only one rechit per key layer "<<key_layer<<"  "<<fEvent<<" sum "<<temp_sumq[key_layer]<<std::endl;
+              m_cscSegments_single_trk_recHitRecord[key_layer][2] = temp_sumq[key_layer];
            } else {
+						    // To check delta x and delta y for events with more than 1 hit count
                 if(debug_bool) std::cout << "Multiple rechits for key layer: " << key_layer << ". sumQ not stored." <<std::endl;
            }
         }
@@ -769,7 +779,7 @@ ostringstream ss;
 	      ", "<<  (unsigned long)fvertex_nVertex<<
 	      ", "<<  (long)fvertex_nVertex<<
 	      endl;// ", "<<_n_PV <<endl;*/
-//	    _n_PV = fvertex_nVertex;
+	    _n_PV = fvertex_nVertex;
 
 	    _rhsumQ_RAW = sumq;
 	    std::pair<double,double>  gasgainandhv = UncorrGasGain_HVInitial(sumq,fRun,_stationring,_rhid);
@@ -819,7 +829,7 @@ void AnalysisGasGain::CycleTree(HistMan* histos) {
   TBranch *b_Run=tree->GetBranch("Run");
 	if(debug_program) std::cout<<"first branch declared"<<std::endl;
   TBranch *b_LumiSect=tree->GetBranch("LumiSect");
-//  TBranch *b_vertex_nVertex=tree->GetBranch("vertex_nVertex");
+  TBranch *b_vertex_nVertex=tree->GetBranch("vertex_nVertex");
   TBranch *b_Event=tree->GetBranch("Event");
   TBranch *b_timeSecond=tree->GetBranch("timeSecond");
   TBranch *b_BunchCrossing=tree->GetBranch("BunchCrossing");
@@ -895,7 +905,7 @@ void AnalysisGasGain::CycleTree(HistMan* histos) {
   b_Event->SetAddress(&fEvent);
   b_LumiSect->SetAddress(&fLumiSect);
   b_timeSecond->SetAddress(&ftimeSecond);
-//  b_vertex_nVertex->SetAddress(&fvertex_nVertex);
+  b_vertex_nVertex->SetAddress(&fvertex_nVertex);
   
 	if(debug_bool) std::cout<<"did setup basic branches :1 "<<std::endl;
   b_recHits2D_nRecHits2D->SetAddress(&frecHits2D_nRecHits2D);
@@ -1038,16 +1048,13 @@ fmuons_cscSegmentRecord_localX    = 0;
   double pT_cut = 28;
 
 for(Int_t ient=0;ient<nentries;ient++) {
-//  for(Int_t ient=0;ient<5;ient++) {
    
-  //if(debug_program)  std::cout<<"time to load a entry"<<std::endl;
-     if(debug_new) std::cout<<"time to load a entry"<<ient<<std::endl;
+     if(debug_program)  std::cout<<"time to load a entry"<<std::endl;
      b_Run->GetEntry(ient);
      b_Event->GetEntry(ient);
      b_LumiSect->GetEntry(ient);
      b_timeSecond->GetEntry(ient);
-     
-//     b_vertex_nVertex->GetEntry(ient);
+     b_vertex_nVertex->GetEntry(ient);
      b_BunchCrossing->GetEntry(ient);
 
      b_recHits2D_nRecHits2D->GetEntry(ient);
@@ -1135,7 +1142,7 @@ for(Int_t ient=0;ient<nentries;ient++) {
     // Variables to count the events passing each selection step
     double isolation_value, isolation_value_04; 
     double isolation_value_one, isolation_value_two;
-     for(int iM = 0; iM< fmuons_nMuons;iM++) {
+     for(int iM = 0; iM< fmuons_nMuons;iM++){
 			 fmuons_Zcand[iM] = false; fmuons_isomuondzdxy[iM] = false;
 			 fmuons_TightId[iM] = false;
        fmuons_matched_trigger[iM] = false;
@@ -1422,6 +1429,7 @@ for(Int_t ient=0;ient<nentries;ient++) {
 
     if(runnb_previous_event != fRun ||   lumis_previous_event !=  fLumiSect)   _instlumi =instlumi(fRun, fLumiSect, year) ;
 		float intlumi_to_add; 
+		// Change this part for future part
      if(runnb_previous_event != fRun )
 			{ 
 				if(year=="2016") {
@@ -1584,6 +1592,7 @@ for(Int_t ient=0;ient<nentries;ient++) {
   //************************************************************************
 
 
+  histos->writeHists(histrootfile, nentries, passed_Zevents,cnt_used, cnt_usedhits);
   histos->writeHists(histrootfile);
 	
   if(debug_bool) std::cout<<" before closing the histogram and after writing the histogram "<<endl;

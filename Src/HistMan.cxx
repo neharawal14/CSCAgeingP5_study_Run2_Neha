@@ -15,6 +15,8 @@
 #include "TH2F.h"
 #include <algorithm>
 
+#include "TTree.h"
+
 ClassImp(HistMan)
 
  HistMan::HistMan() { }
@@ -26,7 +28,25 @@ ClassImp(HistMan)
   std::map<std::string,std::pair<TH1F*,std::string> > theMapTH1F;
   std::map<std::string,std::pair<TH2F*,std::string> > theMapTH2F;
 
-
+ void HistMan::writeHists(TFile* theFile, Long64_t nTotal, Long64_t nPassed, Long64_t used_events,  Long64_t totalHits){
+		theFile->cd();
+		
+		// Make a 1-entry summary tree
+		TTree summary("SummaryTree","Job / file summary");
+		
+		Long64_t NTotal   = nTotal;
+		Long64_t NPassed  = nPassed;
+		Long64_t TotalHits = totalHits;
+		Long64_t UsedEvents = used_events;
+		
+		summary.Branch("nTotal",    &NTotal,    "nTotal/L");
+		summary.Branch("nPassed",   &NPassed,   "nPassed/L");
+		summary.Branch("totalHits", &TotalHits, "totalHits/L");
+		summary.Branch("used_events", &UsedEvents, "used_events/L");
+		
+		summary.Fill();
+		summary.Write();   // writes into the currently open file
+	}
   // write hists to file with folders
   void HistMan::writeHists(TFile* theFile){
     std::vector<std::string> theFolders;

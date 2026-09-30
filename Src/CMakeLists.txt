@@ -12,6 +12,7 @@ find_package(ROOT REQUIRED CONFIG)
 root_generate_dictionary(G__Analysis
 	#old_AnalysisGasGain.h
 	AnalysisGasGain.h
+	#new_AnalysisGasGain.h -> I was trying to update the Analysis code to read integratelumi value from the byls file and implementing HV values there
   HistMan.h
   ChargeORIGandInstL.h
   me11.h
@@ -23,6 +24,7 @@ root_generate_dictionary(G__Analysis
 # Create shared library
 add_library(Analysis SHARED
 	AnalysisGasGain.cxx
+	##new_AnalysisGasGain.cxx -> I was trying to update the Analysis code to read integratelumi value from the byls file and implementing HV values there
 	#old_AnalysisGasGain.cxx
   HistMan.cxx
   ChargeORIGandInstL.C

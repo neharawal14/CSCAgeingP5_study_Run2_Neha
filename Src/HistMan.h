@@ -19,6 +19,7 @@ public:
 
   // write hists to file with folders
   void writeHists(TFile *);
+	void writeHists(TFile* theFile, Long64_t nTotal, Long64_t nPassed, Long64_t used_events, Long64_t totalHits);
 
   // fill 1-Dim histograms 
 

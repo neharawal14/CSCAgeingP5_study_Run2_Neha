@@ -3,7 +3,7 @@ double instlumi(int runnb, int lumis, TString year){
   TString runnb_tstr = (TString) Form("%d",runnb);
   TString ls_tstr = (TString)Form("%d",lumis);
  
-  TString tstrtest = "/cmsuf/data/store/user/t2/users/neha.rawal/CSCAgeing_code/CMSSW_13_3_0/src/files_HVandLumi/InstLumiPerRun/"+year+"/"+runnb_tstr+".csv";
+  TString tstrtest = "./../files_HVandLumi/InstLumiPerRun/"+year+"/"+runnb_tstr+".csv";
   ifstream lumifile;
   lumifile.open(tstrtest.Data());
   string value;
